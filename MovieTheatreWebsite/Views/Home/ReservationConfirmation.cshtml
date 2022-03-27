@@ -1,0 +1,19 @@
+﻿@model MovieTheatreDatabase.Reservation
+<div class="container row pt-4">
+    <div class="col-12 text-center">
+        <h1 class="text-primary text-center">Reservation Placed Successfully!</h1>
+        Your Order Number is : @Model.ReservationGuid<br />
+        Your TheatreRoom is : @Model.MovieTheatreRoom.TheatreRoom.Name<br />
+        Your reserved @Model.ReservationChairNr.Count chair@{if(Model.ReservationChairNr.Count > 1) @Html.Raw("s")} on number: @string.Join(", ", @Model.ReservationChairNr.Where(x=> x.ReservationId == @Model.ReservationId).Select(x => x.ChairNr))<br /><br />
+        <Button ID="printButton"class="btn btn-primary form-control" style="height:50px"  runat="server" Text="Print" onclick="javascript:window.print();">PRINT RESERVATION</Button> <br /><br />
+
+        <img src="https://i.pinimg.com/564x/60/c1/4a/60c14a43fb4745795b3b358868517e79.jpg" width="20%" /><br /><br />
+        <img src="~/img/lawn_leaf.jpg" width="65%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Your reservation has been placed successfully! <br />
+        
+    </div>
+</div> 
+

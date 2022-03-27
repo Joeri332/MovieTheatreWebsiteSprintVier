@@ -1,0 +1,227 @@
+﻿@using MovieTheatreWebsite.Statics
+@model MovieTheatreDatabase.Reservation
+@using Microsoft.Extensions.Options
+@inject IOptions<MovieTheatreUtility.StripeSettings> Stripe
+
+
+
+<form method="post">
+    <input hidden asp-for="MovieTheatreRoomId" />
+    <input hidden asp-for="ReservationId" />
+
+    <div class="card  container pt-4">
+        <div class="card-header bg-primary text-light ml-0  row ">
+            <div class="col-12 col-md-6">
+                <h1 class="text-white-50">@Model.MovieTheatreRoom.Movie.Name</h1>
+                <p class="text-warning">by @Model.MovieTheatreRoom.Movie.ShortDescription</p>
+            </div>
+            <div class="col-12 col-md-6 text-end pt-4">
+                <span class="badge bg-info pt-2" style="height:30px;">AGE: @Model.MovieTheatreRoom.Movie.AgeRestriction</span>
+                <span class="badge bg-warning pt-2" style="height:30px;">@Model.MovieTheatreRoom.Movie.Genre</span>
+
+            </div>
+        </div>
+        <div class="card-body row container">
+            <div class="container rounded p-2">
+                <div class="row">
+                    <div class="col-8 col-lg-8">
+
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Date Time: @Model.MovieTheatreRoom.DateTime.ToString("g")</h5>
+
+                            <h5 class="text-muted">Director : @Model.MovieTheatreRoom.Movie.Director</h5>
+                            <h5 class="text-muted">Stars : @Model.MovieTheatreRoom.Movie.Stars</h5>
+
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Room: @Model.MovieTheatreRoom.TheatreRoom.Name</h5>
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Category: @Statics.GetEnumDescription(Model.MovieTheatreRoom.TheatreRoom.TheatreRoomCategory)</h5>
+                        </div>
+                        <div class="row text-center">
+                        </div>
+                        <div class="row text-center" style="color:maroon; font-weight:bold">
+                        </div>
+                        <div class="row pl-2">
+                            <p class="text-secondary pt-1">@Html.Raw(Model.MovieTheatreRoom.Movie.LongDescription)</p>
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted pt-2">Duration: @Model.MovieTheatreRoom.Movie.Duration.ToString("g")</h5>
+                        </div>
+                        <div class="row pt-2">
+                            <h5 class="text-muted pt-2">Price: </h5>
+                        </div>
+                        <div class="form-group">
+                            <select asp-for="PriceId" asp-items="ViewBag.PriceSelect" class="form-control">
+                                <Option value="">-- Please select one --</Option>
+                            </select>
+                            <span asp-validation-for="PriceId" class="text-danger"></span>
+                        </div>
+                        <div class="row pt-2">
+                            <h5 class="text-muted pt-2">Food & Drinks Specials: </h5>
+                        </div>
+                        <div class="form-group">
+                            <select asp-for="PriceIdSpecial" asp-items="ViewBag.SpecialArrangements" class="form-control">
+                                <Option value="">-- None selected --</Option>
+
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 pb-1">
+                            <div class="form-group ">
+                                <a type="button" class="button automaticButton">Automatic seat placement</a>
+                                <br>
+                                <a type="button" class="manualButton">Choose your own seats</a>
+                            </div>
+
+                    
+                        <div class="form-group manual seats" @ViewBag.hideManual >
+
+                            @{ Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName); }
+
+                        </div>
+
+                        <div class="form-group automatic" @ViewBag.hideAutomatic>
+                            @if (@Model.Prices.PriceId == 17)
+                            {
+                                <label asp-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="control-label text-muted pt-3">TICKET COUNT (between 1 and @Model.MovieTheatreRoom.TheatreRoom.ChairCount)</label>
+
+                                <br />
+                                <input asp-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="chairCount text-muted" min="1" max="1" value="@ViewBag.ChairCount" max=@Model.MovieTheatreRoom.TheatreRoom.ChairCount>
+                                <span asp-validation-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="text-danger"></span>
+                                <br />
+                                <label class="control-label text-muted pt-3">VOUCHER CODE</label>
+                                <br />
+                                <input id="keyboard" type="text" class="voucherCode" value="@ViewBag.VoucherCode" />
+                                <i class="bi bi-keyboard h2 p-lg-3"></i>
+                            }
+                            else
+                            {
+
+                                <label asp-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="control-label text-muted pt-3">TICKET COUNT (between 1 and @Model.MovieTheatreRoom.TheatreRoom.ChairCount)</label>
+
+                                <br />
+                                <input asp-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="chairCount" min="1" value="@ViewBag.ChairCount" max=@Model.MovieTheatreRoom.TheatreRoom.ChairCount>
+                                <span asp-validation-for="MovieTheatreRoom.TheatreRoom.ChairCount" class="text-danger"></span>
+                                <br />
+
+                                <input id="keyboard" type="text" class="voucherCode visually-hidden" value="@ViewBag.VoucherCode" />
+                            }
+
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-primary pt-4"> Total Price: &nbsp @(((decimal) ViewBag.TotalPrice).ToString("C2"))</h5>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                        <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
+                    </div>
+                    <input type="hidden" id="hiddenAutomatic" name="hiddenAutomatic" value="@ViewBag.hiddenAutomatic">
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-12 col-md-6 pb-1">
+                    <a class="btn btn-success form-control " style="height:50px;" asp-action="Index">Back to Home</a>
+                </div>
+                <div class="col-12 col-md-6 pb-1">
+
+                    @if (@Model.Prices.PriceId == 17 && @ViewBag.Voucher == null)
+                    {
+                        <button type="submit" value="PIN" class="btn btn-primary form-control visually-hidden" style="height:50px;">PIN payment</button>
+                    }
+                    else if (@Model.Prices.PriceId == 17 && @ViewBag.Voucher != null)
+                    {
+                        <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">BOOK ticket</button>
+                    }
+                    else
+                    {
+                        <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">PIN payment</button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+    <script>
+        $( document ).ready(function() {
+            $("#PriceId").change(function () {
+                window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
+            });
+            $("#PriceIdSpecial").change(function () {
+                window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
+            });
+
+            (function () {
+                var timeout = {};
+                var update = function () {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(function () {
+                        window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val()+ "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
+                    }, 1000);
+                };
+
+                //$('.voucherCode').keyup(update);
+                $('.voucherCode').change(update);
+                $('.chairCount').change(update);
+            }());
+            $(".automaticButton").click(function () {
+                $("#hiddenAutomatic").val("True");
+                window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
+            });
+            $(".manualButton").click(function () {
+                $("#hiddenAutomatic").val("False");
+                window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val() + "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
+            });
+
+            $(".checkBoxChairsClass").on('change', function() {
+                window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val() + "&checkBoxChairsValues="  + getCheckboxValues()
+            });
+        });
+        $.extend({
+            distinct : function(anArray) {
+                var result = [];
+                $.each(anArray, function(i,v){
+                    if ($.inArray(v, result) == -1) result.push(v);
+                });
+                return result;
+            }
+        });
+        function getCheckboxValues() {
+            var checkboxValueList = [];
+            $.each($("#checkBoxChairs:checked"), function(){
+                checkboxValueList.push($(this).val());
+            });
+            /*$.each($(".checkBoxChairsClass"), function(){
+                if ($(this).data("npChecked") == "1") {
+                    checkboxValueList.push($(this).val());
+                }
+            });*/
+            return $.distinct(checkboxValueList).join(",");
+        }
+    </script>
+    
+    <script type="text/javascript">
+        var xPos, yPos;
+        var prm = Sys.WebForms.PageRequestManager.getInstance();
+        prm.add_beginRequest(BeginRequestHandler);
+        prm.add_endRequest(EndRequestHandler);
+        function BeginRequestHandler(sender, args) {
+            xPos = $get('scrollDiv').scrollLeft;
+            yPos = $get('scrollDiv').scrollTop;
+        }
+        function EndRequestHandler(sender, args) {
+            $get('scrollDiv').scrollLeft = xPos;
+            $get('scrollDiv').scrollTop = yPos;
+        }
+
+
+    </script>
+
+}
