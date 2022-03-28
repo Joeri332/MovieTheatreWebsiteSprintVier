@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MovieTheatreModels.Enums;
 
 namespace MovieTheatreDatabase
 {
-    public sealed class MovieTheatreDatabaseContext : DbContext
+    public sealed class MovieTheatreDatabaseContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
         public MovieTheatreDatabaseContext(DbContextOptions<MovieTheatreDatabaseContext> options) : base(options)
         {
@@ -349,48 +351,48 @@ namespace MovieTheatreDatabase
             modelBuilder.Entity<TheatreRoom>().HasData(
                 new TheatreRoom() { TheatreRoomId = 6, Name = "Six", ChairCount = 50, PartialViewName = "_PartialViewTheatreRoomSix", TheatreRoomCategory = TheatreRoomCategory.Regular }
             );
-
+            var datetime = DateTime.Today.AddDays(1);
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 1, MovieId = 1, TheatreRoomId = 1, DateTime = new DateTime(2022, 3, 24, 15, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 1, MovieId = 1, TheatreRoomId = 1, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 2, MovieId = 2, TheatreRoomId = 2, DateTime = new DateTime(2022, 3, 24, 17, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 2, MovieId = 2, TheatreRoomId = 2, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 3, MovieId = 3, TheatreRoomId = 3, DateTime = new DateTime(2022, 3, 24, 19, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 3, MovieId = 3, TheatreRoomId = 3, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 4, MovieId = 4, TheatreRoomId = 4, DateTime = new DateTime(2022, 3, 24, 21, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 4, MovieId = 4, TheatreRoomId = 4, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 5, MovieId = 5, TheatreRoomId = 5, DateTime = new DateTime(2022, 3, 24, 23, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 5, MovieId = 5, TheatreRoomId = 5, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 6, MovieId = 6, TheatreRoomId = 6, DateTime = new DateTime(2022, 3, 25, 10, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 6, MovieId = 6, TheatreRoomId = 6, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 7, MovieId = 7, TheatreRoomId = 1, DateTime = new DateTime(2022, 3, 25, 12, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 7, MovieId = 7, TheatreRoomId = 1, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 8, MovieId = 8, TheatreRoomId = 2, DateTime = new DateTime(2022, 3, 25, 14, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 8, MovieId = 8, TheatreRoomId = 2, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 9, MovieId = 9, TheatreRoomId = 3, DateTime = new DateTime(2022, 3, 25, 16, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 9, MovieId = 9, TheatreRoomId = 3, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 10, MovieId = 10, TheatreRoomId = 4, DateTime = new DateTime(2022, 3, 25, 18, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 10, MovieId = 10, TheatreRoomId = 4, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 11, MovieId = 11, TheatreRoomId = 5, DateTime = new DateTime(2022, 3, 25, 20, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 11, MovieId = 11, TheatreRoomId = 5, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 12, MovieId = 12, TheatreRoomId = 6, DateTime = new DateTime(2022, 3, 25, 22, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 12, MovieId = 12, TheatreRoomId = 6, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 13, MovieId = 13, TheatreRoomId = 1, DateTime = new DateTime(2022, 3, 25, 23, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 13, MovieId = 13, TheatreRoomId = 1, DateTime = datetime }
             );
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
-                new MovieTheatreRoom() { MovieTheatreRoomId = 14, MovieId = 14, TheatreRoomId = 2, DateTime = new DateTime(2022, 3, 26, 10, 36, 36) }
+                new MovieTheatreRoom() { MovieTheatreRoomId = 14, MovieId = 14, TheatreRoomId = 2, DateTime = datetime }
             );
 
 

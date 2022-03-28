@@ -75,11 +75,11 @@
                             </div>
 
                     
-                        <div class="form-group manual seats" @ViewBag.hideManual >
+                            <div class="form-group manual seats" @ViewBag.hideManual>
 
-                            @{ Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName); }
+                                @{ Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName); }
 
-                        </div>
+                            </div>
 
                         <div class="form-group automatic" @ViewBag.hideAutomatic>
                             @if (@Model.Prices.PriceId == 17)
