@@ -19,6 +19,9 @@ namespace MovieTheatreDatabase
         public DbSet<Price> Prices { get; set; }
         public DbSet<VoucherCode> VoucherCodes { get; set; }
         public DbSet<ReservationChairNr> ReservationChairNr { get; set; }
+        public DbSet<Survey> Surveys { get; set; }
+        public DbSet<SurveyQuestion> SurveyQuestions { get; set; }
+        public DbSet<SurveyAnswers> SurveyAnswers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

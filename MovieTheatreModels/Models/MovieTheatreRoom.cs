@@ -11,7 +11,6 @@ namespace MovieTheatreDatabase
         public int TheatreRoomId { get; set; }
         public TheatreRoom TheatreRoom { get; set; }
         public DateTime DateTime { get; set; }
-
         public List<Reservation> Reservations { get; set; }
     }
 }
