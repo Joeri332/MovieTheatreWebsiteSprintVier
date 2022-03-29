@@ -1,4 +1,4 @@
-//using Microsoft.EntityFrameworkCore;
+﻿//using Microsoft.EntityFrameworkCore;
 
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -9,6 +9,7 @@ using MovieTheatreUtility;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<MovieTheatreDatabaseContext>();

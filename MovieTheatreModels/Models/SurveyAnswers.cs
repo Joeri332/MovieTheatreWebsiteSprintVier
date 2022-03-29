@@ -8,6 +8,7 @@ namespace MovieTheatreDatabase
         [Key] public int SurveyAnswersId { get; set; }
         public int SurveyId { get; set; }
         public int SurveyQuestionId { get; set; }
+        public QuestionOptionEnums QuestionOptionEnums { get; set; }
         public string name { get; set; }
 
     } 
