@@ -398,6 +398,14 @@ namespace MovieTheatreDatabase
                 new MovieTheatreRoom() { MovieTheatreRoomId = 14, MovieId = 14, TheatreRoomId = 2, DateTime = datetime }
             );
 
+            modelBuilder.Entity<Survey>().HasData(
+                new Survey() { SurveyId = 1, Description = "TestSurvey", CreatedDate = datetime}
+            );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() {SurveyQuestionId = 1, SurveyId = 1, Text = "Testvraag", QuestionType = "Expierence"  }
+            );
+
 
             modelBuilder.Entity<ReservationChairNr>().HasData(
                 new ReservationChairNr(1, 1),

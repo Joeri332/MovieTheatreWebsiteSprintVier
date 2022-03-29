@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
+using MovieTheatreModels.Dto;
+
 
 namespace MovieTheatreWebsite.Controllers
 {
@@ -22,7 +24,8 @@ namespace MovieTheatreWebsite.Controllers
         // GET: SurveyQuestions
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SurveyQuestion.ToListAsync());
+            var movieTheatreWebsiteContext = _context.SurveyQuestion.Include(s => s.survey);
+            return View(await movieTheatreWebsiteContext.ToListAsync());
         }
 
         // GET: SurveyQuestions/Details/5
@@ -34,6 +37,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             var surveyQuestion = await _context.SurveyQuestion
+                .Include(s => s.survey)
                 .FirstOrDefaultAsync(m => m.SurveyQuestionId == id);
             if (surveyQuestion == null)
             {
@@ -46,6 +50,7 @@ namespace MovieTheatreWebsite.Controllers
         // GET: SurveyQuestions/Create
         public IActionResult Create()
         {
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description");
             return View();
         }
 
@@ -54,14 +59,15 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SurveyQuestionId,Text,QuestionType,QuestionOptionEnums")] SurveyQuestion surveyQuestion)
+        public async Task<IActionResult> Create([Bind("SurveyQuestionId,SurveyId,Text,QuestionType")] SurveyQuestionDto surveyQuestion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(surveyQuestion);
+                _context.Add(surveyQuestion.ToDb());
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyQuestion.SurveyId);
             return View(surveyQuestion);
         }
 
@@ -78,6 +84,7 @@ namespace MovieTheatreWebsite.Controllers
             {
                 return NotFound();
             }
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyQuestion.SurveyId);
             return View(surveyQuestion);
         }
 
@@ -86,7 +93,7 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SurveyQuestionId,Text,QuestionType,QuestionOptionEnums")] SurveyQuestion surveyQuestion)
+        public async Task<IActionResult> Edit(int id, [Bind("SurveyQuestionId,SurveyId,Text,QuestionType")] SurveyQuestionDto surveyQuestion)
         {
             if (id != surveyQuestion.SurveyQuestionId)
             {
@@ -97,7 +104,7 @@ namespace MovieTheatreWebsite.Controllers
             {
                 try
                 {
-                    _context.Update(surveyQuestion);
+                    _context.Update(surveyQuestion.ToDb());
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -113,6 +120,7 @@ namespace MovieTheatreWebsite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyQuestion.SurveyId);
             return View(surveyQuestion);
         }
 
@@ -125,6 +133,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             var surveyQuestion = await _context.SurveyQuestion
+                .Include(s => s.survey)
                 .FirstOrDefaultAsync(m => m.SurveyQuestionId == id);
             if (surveyQuestion == null)
             {
