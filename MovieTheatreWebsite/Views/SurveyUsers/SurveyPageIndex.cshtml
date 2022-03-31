@@ -1,0 +1,21 @@
+﻿@model List<MovieTheatreDatabase.Survey>
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div>
+    @foreach (var survey in @Model)
+    {
+       
+        <a asp-action="SurveyPageDetails" class="btn btn-primary form-control" asp-route-SurveyId="@survey.SurveyId">@survey.Name</a>
+    }
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,24 @@
+﻿@using MovieTheatreModels.Enums
+@model MovieTheatreDatabase.Survey
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div>
+    @foreach (var surveyQuestion in @Model.Questions)
+    {
+        @surveyQuestion.Text<br>
+        <select class="form-control" asp-items="Html.GetEnumSelectList<QuestionOptionEnums>()"> <option>Select type ...</option></select>     
+      
+    }
+
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

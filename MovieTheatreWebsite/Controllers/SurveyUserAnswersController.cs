@@ -164,10 +164,5 @@ namespace MovieTheatreWebsite.Controllers
             return _context.SurveyUserAnswers.Any(e => e.SurveyUserAnswerId == id);
         }
 
-        public IActionResult SurveyPageIndex()
-        {
-            var surveyUserAnswers = _context.SurveyUserAnswers.ToList();
-            return View(surveyUserAnswers);
-        }
     }
 }

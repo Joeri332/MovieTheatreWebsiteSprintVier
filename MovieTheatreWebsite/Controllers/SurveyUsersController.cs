@@ -156,5 +156,22 @@ namespace MovieTheatreWebsite.Controllers
         {
             return _context.SurveyUser.Any(e => e.SurveyUserId == id);
         }
+
+        public IActionResult SurveyPageIndex()
+        {
+            var surveys = _context.Survey.ToList();
+            return View(surveys);
+        }
+
+        public IActionResult SurveyPageDetails(int? surveyId)
+        {
+            var surveys = _context.Survey.Include(x => x.Questions).ToList();
+            var survey = surveys.Find(x => x.SurveyId == surveyId);
+            if (survey == null)
+            {
+                return RedirectToAction(nameof(SurveyPageIndex));
+            }
+            return View(survey);
+        }
     }
 }
