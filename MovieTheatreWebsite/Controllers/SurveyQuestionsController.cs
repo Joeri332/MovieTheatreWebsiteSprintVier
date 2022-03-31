@@ -24,7 +24,7 @@ namespace MovieTheatreWebsite.Controllers
         // GET: SurveyQuestions
         public async Task<IActionResult> Index()
         {
-            var movieTheatreWebsiteContext = _context.SurveyQuestion.Include(s => s.survey);
+            var movieTheatreWebsiteContext = _context.SurveyQuestion.Include(s => s.Survey);
             return View(await movieTheatreWebsiteContext.ToListAsync());
         }
 
@@ -37,7 +37,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             var surveyQuestion = await _context.SurveyQuestion
-                .Include(s => s.survey)
+                .Include(s => s.Survey)
                 .FirstOrDefaultAsync(m => m.SurveyQuestionId == id);
             if (surveyQuestion == null)
             {
@@ -133,7 +133,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             var surveyQuestion = await _context.SurveyQuestion
-                .Include(s => s.survey)
+                .Include(s => s.Survey)
                 .FirstOrDefaultAsync(m => m.SurveyQuestionId == id);
             if (surveyQuestion == null)
             {

@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.survey)
+                @Html.DisplayNameFor(model => model.Survey)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Text)
@@ -29,7 +29,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.survey.Description)
+                @Html.DisplayFor(modelItem => item.Survey.Description)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Text)

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
 using MovieTheatreModels.Dto;
 
+
 namespace MovieTheatreWebsite.Controllers
 {
     public class SurveysController : Controller
@@ -55,7 +56,7 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SurveyId,Description,CreatedDate,ExpiresOn")] SurveyDto survey)
+        public async Task<IActionResult> Create([Bind("SurveyId,Name,Description,CreatedDate,ExpiresOn")] SurveyDto survey)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +88,7 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SurveyId,Description,CreatedDate,ExpiresOn")] SurveyDto survey)
+        public async Task<IActionResult> Edit(int id, [Bind("SurveyId,Name,Description,CreatedDate,ExpiresOn")] SurveyDto survey)
         {
             if (id != survey.SurveyId)
             {

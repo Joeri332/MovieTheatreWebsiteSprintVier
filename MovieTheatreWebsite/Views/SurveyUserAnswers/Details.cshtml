@@ -1,0 +1,37 @@
+﻿@model MovieTheatreDatabase.SurveyUserAnswer
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SurveyUserAnswers</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SurveyUser)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyUser.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SurveyQuestion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyQuestion.QuestionType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionOptionEnums)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuestionOptionEnums)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SurveyUserAnswerId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

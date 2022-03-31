@@ -21,12 +21,14 @@ namespace MovieTheatreDatabase
         public DbSet<ReservationChairNr> ReservationChairNr { get; set; }
         public DbSet<Survey> Survey { get; set; }
         public DbSet<SurveyQuestion> SurveyQuestion { get; set; }
-        public DbSet<SurveyAnswers> SurveyAnswers { get; set; }
+        public DbSet<SurveyUser> SurveyUser { get; set; }
+        public DbSet<SurveyUserAnswer> SurveyUserAnswers { get; set; }
+
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.Entity<ReservationChairNr>()
                 .HasKey(x => new { x.ReservationId, x.ChairNr });
 
@@ -399,12 +401,26 @@ namespace MovieTheatreDatabase
             );
 
             modelBuilder.Entity<Survey>().HasData(
-                new Survey() { SurveyId = 1, Description = "TestSurvey", CreatedDate = datetime}
+                new Survey() { SurveyId = 1, Name = "MovieTheatre Survey",  Description = "Experience Survey", CreatedDate = datetime}
             );
 
             modelBuilder.Entity<SurveyQuestion>().HasData(
-                new SurveyQuestion() {SurveyQuestionId = 1, SurveyId = 1, Text = "Testvraag", QuestionType = "Expierence"  }
+                new SurveyQuestion() {SurveyQuestionId = 1, SurveyId = 1, Text = "How was the quality of the movie?", QuestionType = "Experience" }
             );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 2, SurveyId = 1, Text = "How  were the seatings?", QuestionType = "Experience" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 3, SurveyId = 1, Text = "Was the movietheatre clean?", QuestionType = "Experience" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 4, SurveyId = 1, Text = "How was the sound?", QuestionType = "Experience" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 5, SurveyId = 1, Text = "What was your overall experience?", QuestionType = "Experience" }
+            );
+  
 
 
             modelBuilder.Entity<ReservationChairNr>().HasData(

@@ -10,22 +10,23 @@ using MovieTheatreDatabase;
 
 namespace MovieTheatreWebsite.Controllers
 {
-    public class SurveyAnswersController : Controller
+    public class SurveyUsersController : Controller
     {
         private readonly MovieTheatreDatabaseContext _context;
 
-        public SurveyAnswersController(MovieTheatreDatabaseContext context)
+        public SurveyUsersController(MovieTheatreDatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: SurveyAnswers
+        // GET: SurveyUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SurveyAnswers.ToListAsync());
+            var movieTheatreWebsiteContext = _context.SurveyUser.Include(s => s.Survey);
+            return View(await movieTheatreWebsiteContext.ToListAsync());
         }
 
-        // GET: SurveyAnswers/Details/5
+        // GET: SurveyUsers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace MovieTheatreWebsite.Controllers
                 return NotFound();
             }
 
-            var surveyAnswers = await _context.SurveyAnswers
-                .FirstOrDefaultAsync(m => m.SurveyAnswersId == id);
-            if (surveyAnswers == null)
+            var surveyUser = await _context.SurveyUser
+                .Include(s => s.Survey)
+                .FirstOrDefaultAsync(m => m.SurveyUserId == id);
+            if (surveyUser == null)
             {
                 return NotFound();
             }
 
-            return View(surveyAnswers);
+            return View(surveyUser);
         }
 
-        // GET: SurveyAnswers/Create
+        // GET: SurveyUsers/Create
         public IActionResult Create()
         {
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description");
             return View();
         }
 
-        // POST: SurveyAnswers/Create
+        // POST: SurveyUsers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SurveyAnswersId,SurveyId,SurveyQuestionId,QuestionOptionEnums,name")] SurveyAnswers surveyAnswers)
+        public async Task<IActionResult> Create([Bind("SurveyUserId,SurveyId,Name,Email,CreatedDate")] SurveyUser surveyUser)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(surveyAnswers);
+                _context.Add(surveyUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(surveyAnswers);
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyUser.SurveyId);
+            return View(surveyUser);
         }
 
-        // GET: SurveyAnswers/Edit/5
+        // GET: SurveyUsers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +77,23 @@ namespace MovieTheatreWebsite.Controllers
                 return NotFound();
             }
 
-            var surveyAnswers = await _context.SurveyAnswers.FindAsync(id);
-            if (surveyAnswers == null)
+            var surveyUser = await _context.SurveyUser.FindAsync(id);
+            if (surveyUser == null)
             {
                 return NotFound();
             }
-            return View(surveyAnswers);
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyUser.SurveyId);
+            return View(surveyUser);
         }
 
-        // POST: SurveyAnswers/Edit/5
+        // POST: SurveyUsers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SurveyAnswersId,SurveyId,SurveyQuestionId,QuestionOptionEnums,name")] SurveyAnswers surveyAnswers)
+        public async Task<IActionResult> Edit(int id, [Bind("SurveyUserId,SurveyId,Name,Email,CreatedDate")] SurveyUser surveyUser)
         {
-            if (id != surveyAnswers.SurveyAnswersId)
+            if (id != surveyUser.SurveyUserId)
             {
                 return NotFound();
             }
@@ -97,12 +102,12 @@ namespace MovieTheatreWebsite.Controllers
             {
                 try
                 {
-                    _context.Update(surveyAnswers);
+                    _context.Update(surveyUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SurveyAnswersExists(surveyAnswers.SurveyAnswersId))
+                    if (!SurveyUserExists(surveyUser.SurveyUserId))
                     {
                         return NotFound();
                     }
@@ -113,10 +118,11 @@ namespace MovieTheatreWebsite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(surveyAnswers);
+            ViewData["SurveyId"] = new SelectList(_context.Survey, "SurveyId", "Description", surveyUser.SurveyId);
+            return View(surveyUser);
         }
 
-        // GET: SurveyAnswers/Delete/5
+        // GET: SurveyUsers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +130,31 @@ namespace MovieTheatreWebsite.Controllers
                 return NotFound();
             }
 
-            var surveyAnswers = await _context.SurveyAnswers
-                .FirstOrDefaultAsync(m => m.SurveyAnswersId == id);
-            if (surveyAnswers == null)
+            var surveyUser = await _context.SurveyUser
+                .Include(s => s.Survey)
+                .FirstOrDefaultAsync(m => m.SurveyUserId == id);
+            if (surveyUser == null)
             {
                 return NotFound();
             }
 
-            return View(surveyAnswers);
+            return View(surveyUser);
         }
 
-        // POST: SurveyAnswers/Delete/5
+        // POST: SurveyUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var surveyAnswers = await _context.SurveyAnswers.FindAsync(id);
-            _context.SurveyAnswers.Remove(surveyAnswers);
+            var surveyUser = await _context.SurveyUser.FindAsync(id);
+            _context.SurveyUser.Remove(surveyUser);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SurveyAnswersExists(int id)
+        private bool SurveyUserExists(int id)
         {
-            return _context.SurveyAnswers.Any(e => e.SurveyAnswersId == id);
+            return _context.SurveyUser.Any(e => e.SurveyUserId == id);
         }
     }
 }
