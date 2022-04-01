@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using MovieTheatreUtility;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);

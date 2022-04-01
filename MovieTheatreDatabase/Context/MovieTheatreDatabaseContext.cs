@@ -34,6 +34,7 @@ namespace MovieTheatreDatabase
 
             base.OnModelCreating(modelBuilder);
 
+
             modelBuilder.Entity<Movie>().HasData(
                 new Movie()
                 {
