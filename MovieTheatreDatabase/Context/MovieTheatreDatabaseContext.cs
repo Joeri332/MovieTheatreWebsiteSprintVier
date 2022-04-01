@@ -356,7 +356,8 @@ namespace MovieTheatreDatabase
             modelBuilder.Entity<TheatreRoom>().HasData(
                 new TheatreRoom() { TheatreRoomId = 6, Name = "Six", ChairCount = 50, PartialViewName = "_PartialViewTheatreRoomSix", TheatreRoomCategory = TheatreRoomCategory.Regular }
             );
-            var datetime = DateTime.Today.AddDays(1);
+            var datetime = DateTime.Today.AddDays(6);
+
             modelBuilder.Entity<MovieTheatreRoom>().HasData(
                 new MovieTheatreRoom() { MovieTheatreRoomId = 1, MovieId = 1, TheatreRoomId = 1, DateTime = datetime }
             );
