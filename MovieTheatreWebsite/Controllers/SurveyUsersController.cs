@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
+using MovieTheatreModels.Enums;
 
 namespace MovieTheatreWebsite.Controllers
 {
@@ -165,7 +166,7 @@ namespace MovieTheatreWebsite.Controllers
 
         public IActionResult SurveyPageDetails(int? surveyId)
         {
-            var surveys = _context.Survey.Include(x => x.Questions).ToList();
+            var surveys = _context.Survey.Include(x => x.SurveyQuestions).ToList();
             var survey = surveys.Find(x => x.SurveyId == surveyId);
             if (survey == null)
             {
@@ -174,6 +175,56 @@ namespace MovieTheatreWebsite.Controllers
             return View(survey);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SurveyPageDetails(int? surveyId, int test)
+        {
+            //Option 1, fetch everything from request.form
+            //Option 2, try to bind everything to SurveyDto(name, email List<SurveyQuestion>)
+            var surveys = _context.Survey.Include(x => x.SurveyQuestions).ToList();
+            var survey = surveys.Find(x => x.SurveyId == surveyId);
+            if (survey == null)
+            {
+                return RedirectToAction(nameof(SurveyPageIndex));
+            }
 
+            var success = Request.Form.TryGetValue("Name", out var stringValueName);
+            success = Request.Form.TryGetValue("Email", out var stringValueEmail) && success;
+
+            if (!success)
+                return RedirectToAction(nameof(SurveyPageIndex));
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            var surveyUser = new SurveyUser
+            {
+                Name = stringValueName.ToString(),
+                Email = stringValueEmail.ToString(),
+                SurveyId = survey.SurveyId,
+                CreatedDate = DateTime.Now
+            };
+            surveyUser = _context.SurveyUser.Add(surveyUser).Entity;
+            await _context.SaveChangesAsync();
+
+            foreach (var surveyQuestion in survey.SurveyQuestions)
+            {
+                success = Request.Form.TryGetValue(surveyQuestion.SurveyQuestionId.ToString(), out var stringValue);
+                success = int.TryParse(stringValue, out var optionsEnumInt) && success;
+                if (!success)
+                    return RedirectToAction(nameof(SurveyPageIndex));
+
+                var surveyUserAnswer = new SurveyUserAnswer
+                {
+                    SurveyQuestionId = surveyQuestion.SurveyQuestionId,
+                    SurveyUserId = surveyUser.SurveyUserId,
+                    QuestionOptionEnums = (QuestionOptionEnums)optionsEnumInt
+                };
+                _context.SurveyUserAnswers.Add(surveyUserAnswer);
+                await _context.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+            return View(survey);
+        }
     }
 }

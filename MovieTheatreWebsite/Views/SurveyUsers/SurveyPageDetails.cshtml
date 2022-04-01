@@ -9,25 +9,23 @@
 
 
 
-<form asp-action="CreateUserAnswer">
-    @foreach (var surveyQuestion in @Model.Questions)
+<form method="post">
+    @foreach (var surveyQuestion in @Model.SurveyQuestions)
     {   
         <div class="form-group">
-            <label asp-for="Questions" class="control-label">@surveyQuestion.Text</label>
-            <select class="form-control" asp-items="Html.GetEnumSelectList<QuestionOptionEnums>()"> <option>Select</option></select> 
+            <label asp-for="SurveyQuestions" class="control-label">@surveyQuestion.Text</label>
+            <select name="@surveyQuestion.SurveyQuestionId" class="form-control" asp-items="Html.GetEnumSelectList<QuestionOptionEnums>()"> <option>Select</option></select> 
             <span asp-validation-for="@surveyQuestion.Text" class="text-danger"></span>
         </div>
     }
     
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label class="control-label">Name</label>
+        <input name="Name" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        <label class="control-label">Email</label>
+        <input name="Email" class="form-control" />
     </div>
 
     <div class="form-group">
