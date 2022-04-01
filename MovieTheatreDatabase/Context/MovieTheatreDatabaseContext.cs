@@ -278,7 +278,7 @@ namespace MovieTheatreDatabase
             modelBuilder.Entity<Price>().HasData(
                 new Price() { PriceId = 8, PriceType = PriceCategory.RegularLong, Name = "Reduction 65+", Amount = 7.50M, PriceInfo = "On shows of the 65+ pass. The discount is valid from Monday to Thursday, excluding holidays and/or public holidays. " }
             );
-            
+
 
             //Movie3D Long data
             modelBuilder.Entity<Price>().HasData(
@@ -292,7 +292,7 @@ namespace MovieTheatreDatabase
             );
             modelBuilder.Entity<Price>().HasData(
                 new Price() { PriceId = 12, PriceType = PriceCategory.Movie3DLong, Name = "Reduction 65+ 3D Movie", Amount = 10.00M, PriceInfo = "Surcharge for 3D movies" }
-            );            
+            );
 
             //Movie3D Short data
             modelBuilder.Entity<Price>().HasData(
@@ -306,7 +306,7 @@ namespace MovieTheatreDatabase
             );
             modelBuilder.Entity<Price>().HasData(
                 new Price() { PriceId = 16, PriceType = PriceCategory.Movie3DShort, Name = "Reduction 65+ 3D Movie", Amount = 9.50M, PriceInfo = "Surcharge for 3D movies" }
-            );         
+            );
 
             //Code data
             modelBuilder.Entity<Price>().HasData(
@@ -403,11 +403,11 @@ namespace MovieTheatreDatabase
             );
 
             modelBuilder.Entity<Survey>().HasData(
-                new Survey() { SurveyId = 1, Name = "MovieTheatre Survey",  Description = "Experience Survey", CreatedDate = datetime}
+                new Survey() { SurveyId = 1, Name = "MovieTheatre Survey", Description = "Experience Survey", CreatedDate = datetime }
             );
 
             modelBuilder.Entity<SurveyQuestion>().HasData(
-                new SurveyQuestion() {SurveyQuestionId = 1, SurveyId = 1, Text = "How was the quality of the movie?", QuestionType = "Experience" }
+                new SurveyQuestion() { SurveyQuestionId = 1, SurveyId = 1, Text = "How was the quality of the movie?", QuestionType = "Experience" }
             );
 
             modelBuilder.Entity<SurveyQuestion>().HasData(
@@ -422,9 +422,6 @@ namespace MovieTheatreDatabase
             modelBuilder.Entity<SurveyQuestion>().HasData(
                 new SurveyQuestion() { SurveyQuestionId = 5, SurveyId = 1, Text = "What was your overall experience?", QuestionType = "Experience" }
             );
-  
-
-
             modelBuilder.Entity<ReservationChairNr>().HasData(
                 new ReservationChairNr(1, 1),
                 new ReservationChairNr(1, 2),
@@ -443,6 +440,27 @@ namespace MovieTheatreDatabase
                     Code = "free",
                     PriceId = 17
                 });
+
+
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Admin",
+                    ConcurrencyStamp = "1",
+                    NormalizedName = "Admin"
+                });
+            var pwHasher = new PasswordHasher<IdentityUser>();
+            var identityUser = new IdentityUser("userName")
+            {
+                Email = "iudfgh@yuihdfg.9uheg"
+            };
+            identityUser.PasswordHash = pwHasher.HashPassword(identityUser, "kanker123");
+
+
+            modelBuilder.Entity<IdentityUser>().HasData(
+                identityUser
+                );
         }
     }
 }
