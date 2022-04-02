@@ -22,52 +22,50 @@
 
             </div>
         </div>
-        <div class="card-body row container">
-            <div class="container rounded p-2">
-                <div class="row">
-                    <div class="col-8 col-lg-8">
+    <div class="card-body row container">
+        <div class="container rounded p-2">
+            <div class="row">
+                <div class="col-8 col-lg-8">
 
-                        <div class="row pl-2">
-                            <h5 class="text-muted">Date Time: @Model.MovieTheatreRoom.DateTime.ToString("g")</h5>
+                    <div class="row pl-2">
+                        <h5 class="text-muted">Date Time: @Model.MovieTheatreRoom.DateTime.ToString("g")</h5>
 
-                            <h5 class="text-muted">Director : @Model.MovieTheatreRoom.Movie.Director</h5>
-                            <h5 class="text-muted">Stars : @Model.MovieTheatreRoom.Movie.Stars</h5>
+                        <h5 class="text-muted">Director : @Model.MovieTheatreRoom.Movie.Director</h5>
+                        <h5 class="text-muted">Stars : @Model.MovieTheatreRoom.Movie.Stars</h5>
 
-                        </div>
-                        <div class="row pl-2">
-                            <h5 class="text-muted">Room: @Model.MovieTheatreRoom.TheatreRoom.Name</h5>
-                        </div>
-                        <div class="row pl-2">
-                            <h5 class="text-muted">Category: @Statics.GetEnumDescription(Model.MovieTheatreRoom.TheatreRoom.TheatreRoomCategory)</h5>
-                        </div>
-                        <div class="row text-center">
-                        </div>
-                        <div class="row text-center" style="color:maroon; font-weight:bold">
-                        </div>
-                        <div class="row pl-2">
-                            <p class="text-secondary pt-1">@Html.Raw(Model.MovieTheatreRoom.Movie.LongDescription)</p>
-                        </div>
-                        <div class="row pl-2">
-                            <h5 class="text-muted pt-2">Duration: @Model.MovieTheatreRoom.Movie.Duration.ToString("g")</h5>
-                        </div>
                     </div>
-
-                    <div class="form-group manual seats">
-
-                        @{
-                            Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName);
-                        }<br/><br/>
-                        
-                        <select asp-for="ReservationGuid" asp-items="ViewBag.SelectReservation" class="form-control"> <option disabled selected>--- SELECT ---</option> </select>
-                        <span asp-validation-for="ReservationGuid" class="text-danger"></span><br/>
-                        <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">Update Reservation</button>
+                    <div class="row pl-2">
+                        <h5 class="text-muted">Room: @Model.MovieTheatreRoom.TheatreRoom.Name</h5>
+                    </div>
+                    <div class="row pl-2">
+                        <h5 class="text-muted">Category: @Statics.GetEnumDescription(Model.MovieTheatreRoom.TheatreRoom.TheatreRoomCategory)</h5>
+                    </div>
+                    <div class="row text-center">
+                    </div>
+                    <div class="row text-center" style="color:maroon; font-weight:bold">
+                    </div>
+                    <div class="row pl-2">
+                        <p class="text-secondary pt-1">@Html.Raw(Model.MovieTheatreRoom.Movie.LongDescription)</p>
+                    </div>
+                    <div class="row pl-2">
+                        <h5 class="text-muted pt-2">Duration: @Model.MovieTheatreRoom.Movie.Duration.ToString("g")</h5>
                     </div>
                 </div>
-                <div class="col-12 col-lg-3 offset-lg-1 text-center">
-                    <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
-                </div>
 
+                <div class="form-group manual seats">
+
+                    @{
+                        Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName);
+                    }<br/><br/>
+                    <select name="ReservationGuid" class="form-control" asp-items="ViewBag.SelectReservation"> <Option value="">-- Please select one --</Option></select> 
+                   
+                    <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">Update Reservation</button>
+                </div>
             </div>
+            <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
+            </div>
+        </div>
 </form>
 @section Scripts {
     @{
