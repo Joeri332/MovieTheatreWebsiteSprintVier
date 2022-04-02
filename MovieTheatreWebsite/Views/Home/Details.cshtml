@@ -109,15 +109,16 @@
                             }
 
                         </div>
-                        <div class="row pl-2">
-                            <h5 class="text-primary pt-4"> Total Price: &nbsp @(((decimal) ViewBag.TotalPrice).ToString("C2"))</h5>
+                            <div class="row pl-2">
+                                <h5 class="text-primary pt-4"> Total Price: &nbsp @(((decimal) ViewBag.TotalPrice).ToString("C2"))</h5>
+                            </div>
+                            <input type="hidden" id="hiddenAutomatic" name="hiddenAutomatic" value="@ViewBag.hiddenAutomatic">
                         </div>
                     </div>
                     <div class="col-12 col-lg-3 offset-lg-1 text-center">
                         <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
                     </div>
-                    <input type="hidden" id="hiddenAutomatic" name="hiddenAutomatic" value="@ViewBag.hiddenAutomatic">
-                </div>
+
             </div>
         </div>
         <div class="card-footer">

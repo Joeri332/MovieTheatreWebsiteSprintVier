@@ -179,8 +179,6 @@ namespace MovieTheatreWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SurveyPageDetails(int? surveyId, int test)
         {
-            //Option 1, fetch everything from request.form
-            //Option 2, try to bind everything to SurveyDto(name, email List<SurveyQuestion>)
             var surveys = _context.Survey.Include(x => x.SurveyQuestions).ToList();
             var survey = surveys.Find(x => x.SurveyId == surveyId);
             if (survey == null)

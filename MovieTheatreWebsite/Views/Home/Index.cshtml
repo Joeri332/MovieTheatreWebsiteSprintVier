@@ -67,6 +67,7 @@
 										@movieTheatreRoom.DateTime.ToString("g")
 										@:::
 										@Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
+									    <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
 									}
 								</p>
 

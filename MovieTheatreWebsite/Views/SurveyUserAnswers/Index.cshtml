@@ -29,10 +29,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.SurveyUser.Email)
+                @Html.DisplayFor(modelItem => item.SurveyUser.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SurveyQuestion.QuestionType)
+                @Html.DisplayFor(modelItem => item.SurveyQuestion.Text)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.QuestionOptionEnums)
