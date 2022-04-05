@@ -55,7 +55,7 @@ namespace MovieTheatreWebsite.Controllers
             return View(movieList);
         }
 
-        
+
         //public ActionResult Index(string age, string genre)
         //{
         //    return null;
@@ -390,14 +390,14 @@ namespace MovieTheatreWebsite.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        
+
         public IActionResult SecretMovie()
         {
 
             var movieTheatreRoomsList =
                 _context.MovieTheatreRooms
                 .Include(x => x.TheatreRoom)
-                .Where(x => x.DateTime > DateTime.Now && x.DateTime < DateTime.Now.AddDays(7)) 
+                .Where(x => x.DateTime > DateTime.Now && x.DateTime < DateTime.Now.AddDays(7))
                 .ToList();
 
             var random = new Random();
@@ -409,7 +409,7 @@ namespace MovieTheatreWebsite.Controllers
 
         //---------------------------------------------------------------------------------------------------------------
         [Authorize(Roles = "Admin, Manager, Cashier")]
-        public Reservation ReservationSeatChangeInformation(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairs, ReservationDto? reservation = null)
+        public Reservation ReservationSeatChangeInformation(int movieTheatreRoomId, int? reservationGuid)
         {
             Reservation reservationObj = new Reservation();
             reservationObj.MovieTheatreRoomId = movieTheatreRoomId;
@@ -417,78 +417,69 @@ namespace MovieTheatreWebsite.Controllers
                 .Include(u => u.TheatreRoom)
                 .First(u => u.MovieTheatreRoomId == movieTheatreRoomId);
 
-            ViewData["SelectReservation"] = new SelectList(_context.Reservations, "ReservationId", "ReservationGuid");
+            ViewData["SelectReservation"] = new SelectList(_context.Reservations, "ReservationId", "ReservationGuid", reservationGuid);
 
-       //creating List from allready taken chairs
-            var takenChairs = _context.ReservationChairNr
+            //Get the selected reservation if not null
+            var reservation = _context.Reservations.FirstOrDefault(x => x.ReservationId == reservationGuid);
+
+            //creating List from allready taken chairs
+            var takenChairsAllReservations = _context.ReservationChairNr
                 .Include(x => x.Reservation)
                 .Where(x => x.Reservation.MovieTheatreRoom.MovieTheatreRoomId == movieTheatreRoomId)
-                .Select(x => x.ChairNr)
                 .ToList();
 
-            ViewData["takenChairs"] = takenChairs;
+            var takenChairsFromSelectedReservations = takenChairsAllReservations.Where(x => x.ReservationId == reservation?.ReservationId).Select(x => x.ChairNr).ToList();
 
-            var chosenChairs = checkBoxChairs?.Split(',').Select(int.Parse).Except(takenChairs).ToList() ?? new List<int>();
-
+            var takenChairs = takenChairsAllReservations.Select(x => x.ChairNr).ToList();
             var selectedChairs = takenChairs.ToList();
-            if (checkBoxChairs != null)
-            {
-                selectedChairs.AddRange(checkBoxChairs.Split(',').Select(int.Parse));
-                selectedChairs = selectedChairs.Distinct().ToList();
-            }
+
+            ViewData["takenChairs"] = takenChairs.Except(takenChairsFromSelectedReservations).ToList();
 
             ViewData["SelectedChairs"] = selectedChairs;
-            
-            return reservationObj;
-        }
-        [Authorize(Roles = "Admin, Manager, Cashier")]
-        public IActionResult ReservationSeatChange(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairsValues)
-        {
-            if (!automaticMode.HasValue || automaticMode.Value)
-            {
-                ViewData["hideManual"] = "style=display:none";
-                ViewData["hiddenAutomatic"] = "True";
-            }
-            else
-            {
-                ViewData["hideAutomatic"] = "style=display:none";
-                ViewData["hiddenAutomatic"] = "False";
-            }
 
-            return View(ReservationSeatChangeInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode, chairCount, automaticMode, checkBoxChairsValues));
+            return reservationObj;
+        } 
+        
+        // Getting the attrubutes from the url including the state of the dropdown
+        [Authorize(Roles = "Admin, Manager, Cashier")]
+        public IActionResult ReservationSeatChange(int movieTheatreRoomId, int? reservationGuid)
+        {
+            return View(ReservationSeatChangeInformation(movieTheatreRoomId, reservationGuid));
         }
 
         [Authorize(Roles = "Admin, Manager, Cashier")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReservationSeatChange(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairsValues, [Bind("UserId,MovieTheatreRoomId,PriceId")] ReservationDto reservation)
+        public async Task<IActionResult> ReservationSeatChange(int movieTheatreRoomId, int? reservationGuid, [Bind("UserId,MovieTheatreRoomId,PriceId")] ReservationDto reservation)
         {
-            var sjenkie = ReservationSeatChangeInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode,
-                chairCount, automaticMode, checkBoxChairsValues);
+            var reservationObj = ReservationSeatChangeInformation(movieTheatreRoomId, reservationGuid);
 
-            var chosenChairs = checkBoxChairsValues?.Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
+            var success = Request.Form.TryGetValue("checkBoxChairs", out var checkBoxChairsStringValue);
 
-            var success = Request.Form.TryGetValue("ReservationGuid", out var stringValue);
-             success = int.TryParse(stringValue, out var ChairNrInt) && success;
+            success = Request.Form.TryGetValue("ReservationGuid", out var stringValue) && success;
+            success = int.TryParse(stringValue, out var ChairNrInt) && success;
 
-             var listOfChainrs = _context.ReservationChairNr
-                 .Include(x => x.Reservation)
-                 .Where(x => x.ReservationId == ChairNrInt)
-                 .ToList();
+            if (!success)
+                return View(reservationObj);
 
-             foreach (var chairNr in listOfChainrs)
+            var listOfChainrs = _context.ReservationChairNr
+                .Include(x => x.Reservation)
+                .Where(x => x.ReservationId == ChairNrInt)
+                .ToList();
 
+            foreach (var chairNr in listOfChainrs)
+            {
+                _context.Remove(chairNr);
+                await _context.SaveChangesAsync();
+            }
+
+            var chosenChairs = checkBoxChairsStringValue.ToString().Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
+
+            foreach (int item in chosenChairs)
              {
-                 chairNr.ChairNr = 5;
-                 _context.Update(chairNr);
-                 await _context.SaveChangesAsync();
-}
-
-            // foreach (int item in chosenChairs)
-            // {
-             //    _context.ReservationChairNr.Add(new ReservationChairNr(1,
-             //        item));
-            // }
+                _context.ReservationChairNr.Add(new ReservationChairNr(ChairNrInt, item));
+                await _context.SaveChangesAsync();
+            }
 
 
             return RedirectToAction("ReservationSeatChange", new { movieTheatreRoomId = movieTheatreRoomId });

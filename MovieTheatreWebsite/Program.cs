@@ -1,5 +1,6 @@
 ﻿//using Microsoft.EntityFrameworkCore;
 
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using MovieTheatreDatabase;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using MovieTheatreUtility;
 using Microsoft.AspNetCore.Identity;
+using MovieTheatreDatabase.Context;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ builder.Services
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+//builder.Services.AddDbContext<MovieTheatreDatabaseContext>(optionsBuilder =>
+  //  optionsBuilder.UseInMemoryDatabase("InMemoryDb"));
 
 var app = builder.Build();
 
@@ -67,4 +71,18 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     }
 });
 
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    try
+    {
+        var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        await UserAndRoleDataInitializer.SeedData(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        Debug.WriteLine(ex.Message);
+    }
+}
 app.Run();

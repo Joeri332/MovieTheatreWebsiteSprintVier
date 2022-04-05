@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MovieTheatreModels.Enums;
 
 namespace MovieTheatreDatabase
@@ -11,6 +12,7 @@ namespace MovieTheatreDatabase
         {
             Database.EnsureCreated();
         }
+
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieTheatreRoom> MovieTheatreRooms { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
@@ -440,92 +442,6 @@ namespace MovieTheatreDatabase
                     Code = "free",
                     PriceId = 17
                 });
-
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Admin",
-                    NormalizedName = "Admin"
-                });
-            var pwHasher = new PasswordHasher<IdentityUser>();
-            var identityUser = new IdentityUser()
-            {
-                Email = "Admin123@hotmail.com",
-                EmailConfirmed = true,
-                PasswordHash = "Admin123!"
-
-            };
-            //identityUser.PasswordHash = pwHasher.HashPassword(identityUser, "Admin123!");
-
-            modelBuilder.Entity<IdentityUser>().HasData(
-                identityUser
-                );
-
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "manager",
-                    NormalizedName = "manager"
-                });
-            var pwHasher1 = new PasswordHasher<IdentityUser>();
-            var identityUser1 = new IdentityUser("manager")
-            {
-                Email = "Manager@hotmail.com",
-                NormalizedEmail = "MANAGER@HOTMAIL.COM",
-                EmailConfirmed =true
-            };
-            identityUser1.PasswordHash = pwHasher1.HashPassword(identityUser1, "Manager123!");
-
-
-            modelBuilder.Entity<IdentityUser>().HasData(
-                identityUser1
-            );
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "Cashier",
-                    NormalizedName = "Cashier"
-                });
-            var pwHasher2 = new PasswordHasher<IdentityUser>();
-            var identityUser2 = new IdentityUser("Cashier")
-            {
-                Email = "Cashier@hotmail.com",
-                NormalizedEmail = "CASHIER@HOTMAIL.COM",
-                EmailConfirmed = true
-            };
-            identityUser2.PasswordHash = pwHasher2.HashPassword(identityUser2, "Cashier123!");
-
-
-            modelBuilder.Entity<IdentityUser>().HasData(
-                identityUser2
-            );
-
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = "User",
-                    NormalizedName = "User"
-                });
-            var pwHasher3 = new PasswordHasher<IdentityUser>();
-            var identityUser3 = new IdentityUser("user")
-            {
-                Email = "User@hotmail.com",
-                NormalizedEmail = "User@HOTMAIL.COM",
-                EmailConfirmed = true
-
-            };
-            identityUser3.PasswordHash = pwHasher3.HashPassword(identityUser3, "User123!");
-
-            modelBuilder.Entity<IdentityUser>().HasData(
-                identityUser3
-            );
         }
     }
 }

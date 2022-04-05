@@ -22,98 +22,80 @@
 
             </div>
         </div>
-    <div class="card-body row container">
-        <div class="container rounded p-2">
-            <div class="row">
-                <div class="col-8 col-lg-8">
+        <div class="card-body row container">
+            <div class="container rounded p-2">
+                <div class="row">
+                    <div class="col-8 col-lg-8">
 
-                    <div class="row pl-2">
-                        <h5 class="text-muted">Date Time: @Model.MovieTheatreRoom.DateTime.ToString("g")</h5>
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Date Time: @Model.MovieTheatreRoom.DateTime.ToString("g")</h5>
 
-                        <h5 class="text-muted">Director : @Model.MovieTheatreRoom.Movie.Director</h5>
-                        <h5 class="text-muted">Stars : @Model.MovieTheatreRoom.Movie.Stars</h5>
+                            <h5 class="text-muted">Director : @Model.MovieTheatreRoom.Movie.Director</h5>
+                            <h5 class="text-muted">Stars : @Model.MovieTheatreRoom.Movie.Stars</h5>
 
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Room: @Model.MovieTheatreRoom.TheatreRoom.Name</h5>
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted">Category: @Statics.GetEnumDescription(Model.MovieTheatreRoom.TheatreRoom.TheatreRoomCategory)</h5>
+                        </div>
+                        <div class="row text-center">
+                        </div>
+                        <div class="row text-center" style="color:maroon; font-weight:bold">
+                        </div>
+                        <div class="row pl-2">
+                            <p class="text-secondary pt-1">@Html.Raw(Model.MovieTheatreRoom.Movie.LongDescription)</p>
+                        </div>
+                        <div class="row pl-2">
+                            <h5 class="text-muted pt-2">Duration: @Model.MovieTheatreRoom.Movie.Duration.ToString("g")</h5>
+                        </div>
                     </div>
-                    <div class="row pl-2">
-                        <h5 class="text-muted">Room: @Model.MovieTheatreRoom.TheatreRoom.Name</h5>
-                    </div>
-                    <div class="row pl-2">
-                        <h5 class="text-muted">Category: @Statics.GetEnumDescription(Model.MovieTheatreRoom.TheatreRoom.TheatreRoomCategory)</h5>
-                    </div>
-                    <div class="row text-center">
-                    </div>
-                    <div class="row text-center" style="color:maroon; font-weight:bold">
-                    </div>
-                    <div class="row pl-2">
-                        <p class="text-secondary pt-1">@Html.Raw(Model.MovieTheatreRoom.Movie.LongDescription)</p>
-                    </div>
-                    <div class="row pl-2">
-                        <h5 class="text-muted pt-2">Duration: @Model.MovieTheatreRoom.Movie.Duration.ToString("g")</h5>
+
+                    <div class="form-group manual seats">
+
+                        @{
+                            Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName);
+                        }<br /><br />
+                        <select name="ReservationGuid" id="ReservationGuid" class="form-control" asp-items="ViewBag.SelectReservation"> <Option value="">-- Please select one --</Option></select>
+
+                        <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">Update Reservation</button>
                     </div>
                 </div>
-
-                <div class="form-group manual seats">
-
-                    @{
-                        Html.RenderPartial(Model.MovieTheatreRoom.TheatreRoom.PartialViewName);
-                    }<br/><br/>
-                    <select name="ReservationGuid" class="form-control" asp-items="ViewBag.SelectReservation"> <Option value="">-- Please select one --</Option></select> 
-                   
-                    <button type="submit" value="PIN" class="btn btn-primary form-control" style="height:50px;">Update Reservation</button>
+                <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                    <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
                 </div>
             </div>
-            <div class="col-12 col-lg-3 offset-lg-1 text-center">
-                <img src="@Model.MovieTheatreRoom.Movie.ImageUrl" width="100%" class="rounded" />
-            </div>
-        </div>
 </form>
 @section Scripts {
     @{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
-
-<script>
-    $( document ).ready(function() {
-        $("#PriceId").change(function () {
-            window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
-        });
-        $("#PriceIdSpecial").change(function () {
-            window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val() + "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
-        });
-
-        (function () {
-            var timeout = {};
-            var update = function () {
-                clearTimeout(timeout);
-                timeout = setTimeout(function () {
-                    window.location = "/Home/Details?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&PriceIdSpecial=" + $("#PriceIdSpecial").val() + "&PriceId=" + $("#PriceId").val() + "&Vouchercode=" + $(".voucherCode").val()+ "&ChairCount="+ $("#MovieTheatreRoom_TheatreRoom_ChairCount").val()+ "&automaticMode=" + $("#hiddenAutomatic").val()+ "&checkBoxChairsValues="  + getCheckboxValues()
-                }, 1000);
-            };
-
-            function getCheckboxValues() {
-        var checkboxValueList = [];
-        $.each($("#checkBoxChairs:checked"), function(){
-            checkboxValueList.push($(this).val());
-        });
-        return $.distinct(checkboxValueList).join(",");
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    
+<script>
+    $(document).ready(function() {
+        //Push the field value of the dropdown in the url
+        $("#ReservationGuid").change(function() {
+            window.location = "/Home/ReservationSeatChange?MovieTheatreRoomId=" + @Model.MovieTheatreRoomId + "&ReservationGuid=" + $("#ReservationGuid").val()
+        });
+    });
 </script>
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
     var xPos, yPos;
     var prm = Sys.WebForms.PageRequestManager.getInstance();
     prm.add_beginRequest(BeginRequestHandler);
     prm.add_endRequest(EndRequestHandler);
+
     function BeginRequestHandler(sender, args) {
         xPos = $get('scrollDiv').scrollLeft;
         yPos = $get('scrollDiv').scrollTop;
     }
+
     function EndRequestHandler(sender, args) {
         $get('scrollDiv').scrollLeft = xPos;
         $get('scrollDiv').scrollTop = yPos;
     }
-
-
-</script>
+</script>-->
 
 }
