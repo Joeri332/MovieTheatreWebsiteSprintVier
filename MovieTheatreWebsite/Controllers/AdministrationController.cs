@@ -5,6 +5,7 @@ using MovieTheatreModels.ViewModels.Administration;
 
 namespace MovieTheatreWebsite.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -22,7 +23,7 @@ namespace MovieTheatreWebsite.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel model)
         {
@@ -55,7 +56,7 @@ namespace MovieTheatreWebsite.Controllers
             var roles = roleManager.Roles;
             return View(roles);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditRole(string id)
         {

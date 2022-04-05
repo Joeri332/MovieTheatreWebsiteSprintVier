@@ -1,11 +1,15 @@
 ﻿@using MovieTheatreModels.Enums
 @using MovieTheatreDatabase
+@using System.Security.Policy
+@using Microsoft.AspNetCore.Identity
 @model MovieTheatreDatabase.Survey
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
+ }
 
 
 <form method="post">
@@ -20,11 +24,11 @@
     
     <div class="form-group">
         <label class="control-label">Name</label>
-        <input name="Name" class="form-control" />
+        <input name="Name" value="@UserManager.GetUserName(User)" class="form-control" />
     </div>
     <div class="form-group">
         <label class="control-label">Email</label>
-        <input name="Email" class="form-control" />
+        <input name="Email" value="@User.Identity.Name" class="form-control" />
     </div>
 
     <div class="form-group">

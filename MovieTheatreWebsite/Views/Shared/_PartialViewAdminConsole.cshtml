@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Stripe.Issuing
+@using MovieTheatreDatabase
+@using MovieTheatreModels.Enums
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,9 +48,11 @@
         .show {display: block;}
     </style>
 </head>
-<body>
+@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+{
+    <body>
 
-<h2>Admin Functions</h2>
+    <h2>Admin Functions</h2>
 
 <div class="dropdown">
     <button onclick="myFunction()" class="dropbtn">Dropdown</button>
@@ -59,10 +66,10 @@
                     <a class="nav-link  text-dark" asp-area="" asp-controller="MovieTheatreRooms" asp-action="Index">MovieTheatreRooms</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link visually-hidden text-dark" asp-area="" asp-controller="TheatreRooms" asp-action="Index">TheatreRoom</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="TheatreRooms" asp-action="Index">TheatreRoom</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link visually-hidden text-dark" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link  text-dark" asp-area="" asp-controller="Administration" asp-action="CreateRole">Create Roles</a>
@@ -107,4 +114,4 @@ toggle between hiding and showing the dropdown content */
 </script>
 
 </body>
-</html>
+}

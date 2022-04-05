@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieTheatreWebsite.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
@@ -241,6 +242,7 @@ namespace MovieTheatreWebsite.Controllers
             //Removing the entrys where the chairs are allready taken
             var availableChairNrList = chairCountTotalList.Except((ViewData["takenChairs"] as List<int>)!).ToList();
 
+
             //checking if the number of chairs added with the reservation doesnt exceed the amount of chairs
             var reservationChairCountSuccess = true;
             if (!automaticMode.HasValue || automaticMode.Value)
@@ -405,8 +407,8 @@ namespace MovieTheatreWebsite.Controllers
             return RedirectToAction("Details", new { movieTheatreRoomId = index });
         }
 
-   //---------------------------------------------------------------------------------------------------------------
-
+        //---------------------------------------------------------------------------------------------------------------
+        [Authorize(Roles = "Admin, Manager, Cashier")]
         public Reservation ReservationSeatChangeInformation(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairs, ReservationDto? reservation = null)
         {
             Reservation reservationObj = new Reservation();
@@ -439,7 +441,7 @@ namespace MovieTheatreWebsite.Controllers
             
             return reservationObj;
         }
-
+        [Authorize(Roles = "Admin, Manager, Cashier")]
         public IActionResult ReservationSeatChange(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairsValues)
         {
             if (!automaticMode.HasValue || automaticMode.Value)
@@ -456,11 +458,15 @@ namespace MovieTheatreWebsite.Controllers
             return View(ReservationSeatChangeInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode, chairCount, automaticMode, checkBoxChairsValues));
         }
 
-
+        [Authorize(Roles = "Admin, Manager, Cashier")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReservationSeatChange(int movieTheatreRoomId, Reservation reservation)
+        public async Task<IActionResult> ReservationSeatChange(int movieTheatreRoomId, int? priceIdSpecial, int? priceId, string? voucherCode, int? chairCount, bool? automaticMode, string? checkBoxChairsValues, [Bind("UserId,MovieTheatreRoomId,PriceId")] ReservationDto reservation)
         {
+            var sjenkie = ReservationSeatChangeInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode,
+                chairCount, automaticMode, checkBoxChairsValues);
+
+            var chosenChairs = checkBoxChairsValues?.Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
 
             var success = Request.Form.TryGetValue("ReservationGuid", out var stringValue);
              success = int.TryParse(stringValue, out var ChairNrInt) && success;
@@ -470,13 +476,20 @@ namespace MovieTheatreWebsite.Controllers
                  .Where(x => x.ReservationId == ChairNrInt)
                  .ToList();
 
-        
              foreach (var chairNr in listOfChainrs)
 
              {
-                 _context.Remove(chairNr);
-             }
-             await _context.SaveChangesAsync();
+                 chairNr.ChairNr = 5;
+                 _context.Update(chairNr);
+                 await _context.SaveChangesAsync();
+}
+
+            // foreach (int item in chosenChairs)
+            // {
+             //    _context.ReservationChairNr.Add(new ReservationChairNr(1,
+             //        item));
+            // }
+
 
             return RedirectToAction("ReservationSeatChange", new { movieTheatreRoomId = movieTheatreRoomId });
 

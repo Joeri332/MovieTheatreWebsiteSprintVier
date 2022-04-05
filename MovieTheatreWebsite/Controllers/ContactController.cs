@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieTheatreModels.Dto;
 
 namespace MovieTheatreWebsite.Controllers
-{ [Authorize]
+{ 
     public class ContactController : Controller
     {
         private readonly ILogger<ContactController> _logger;

@@ -1,4 +1,5 @@
 ﻿#nullable disable
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
@@ -6,6 +7,7 @@ using MovieTheatreModels.Dto;
 
 namespace MovieTheatreWebsite.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class MoviesController : Controller
     {
         private readonly MovieTheatreDatabaseContext _context;
