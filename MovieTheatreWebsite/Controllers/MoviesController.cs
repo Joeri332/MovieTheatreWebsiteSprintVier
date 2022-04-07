@@ -52,7 +52,7 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,ShortDescription,LongDescription,ImageUrl,Duration")] MovieDto movie)
+        public async Task<IActionResult> Create([Bind("Name,ShortDescription,LongDescription,ImageUrl,Genre,AgeRestriction,Language, Duration,Director,Stars")] MovieDto movie)
         {
             if (ModelState.IsValid)
             {

@@ -8,6 +8,8 @@ namespace MovieTheatreDatabase
         public int MovieTheatreRoomId { get; set; }
         public int MovieId { get; set; }
         public int TheatreRoomId { get; set; }
+
+
         public DateTime DateTime { get; set; }
 
         public MovieTheatreRoom ToDb() =>

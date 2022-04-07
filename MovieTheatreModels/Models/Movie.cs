@@ -14,7 +14,7 @@ namespace MovieTheatreDatabase
         public string AgeRestriction { get;  set; }
         public string Language { get; set; }
         [Range(0.0, 10.0)]
-        public double MovieScore { get; set; }
+        public double? MovieScore { get; set; }
         public TimeSpan Duration { get; set; }
         public List<MovieTheatreRoom> MovieTheatreRooms { get; set; }
         public string Director { get; set; }

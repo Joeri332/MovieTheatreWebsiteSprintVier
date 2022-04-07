@@ -1,4 +1,5 @@
-﻿using MovieTheatreDatabase;
+﻿using System.ComponentModel.DataAnnotations;
+using MovieTheatreDatabase;
 
 namespace MovieTheatreModels.Dto
 {
@@ -9,6 +10,9 @@ namespace MovieTheatreModels.Dto
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string ImageUrl { get; set; }
+        public string Genre { get; set; }
+        public string AgeRestriction { get; set; }
+        public string Language { get; set; }
         public string Director { get; set; }
         public string Stars { get; set; }
 
@@ -23,9 +27,13 @@ namespace MovieTheatreModels.Dto
                 ShortDescription = ShortDescription,
                 LongDescription = LongDescription,
                 ImageUrl = ImageUrl,
+                Genre = Genre,
+                AgeRestriction = AgeRestriction,
+                Language = Language,
                 Director = Director,
                 Stars = Stars,
                 Duration = Duration,
+                
             };
     }
 }
