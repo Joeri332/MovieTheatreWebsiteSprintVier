@@ -109,7 +109,7 @@ namespace MovieTheatreWebsite.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(movie);
             }
             return View(movie);
         }

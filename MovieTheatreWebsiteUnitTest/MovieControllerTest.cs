@@ -17,8 +17,7 @@ namespace MovieTheatreWebsite.Tests
 {
     public abstract class MovieControllerTest
     {
-        #region Seeding
-       
+
 
         public MovieControllerTest(DbContextOptions<MovieTheatreDatabaseContext> contextOptions)
         {
@@ -27,191 +26,251 @@ namespace MovieTheatreWebsite.Tests
         }
 
         protected DbContextOptions<MovieTheatreDatabaseContext> ContextOptions { get; }
+        private MovieTheatreDatabaseContext _context { get; set; }
         private void Seed()
         {
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
+            _context = new MovieTheatreDatabaseContext(ContextOptions);
+            _context.Database.EnsureDeleted();
+
+            var one = new Movie()
             {
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
+                Name = "Test One",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
 
-                var one = new Movie()
-                {
-                    Name = "Test One",
-                    ShortDescription = "The Weekend Away does away things",
-                    LongDescription =
-                        "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                    ImageUrl = "/img/the_weekend_away.jpg",
-                    Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
-                    Director = "Kim Farrant",
-                    Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
-                };
+            var two = new Movie()
+            {
+                Name = "Test Two",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
 
-                var two = new Movie()
-                {
-                    Name = "Test Two",
-                    ShortDescription = "The Weekend Away does away things",
-                    LongDescription =
-                        "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                    ImageUrl = "/img/the_weekend_away.jpg",
-                    Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
-                    Director = "Kim Farrant",
-                    Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
-                };
-
-                var three = new Movie()
-                {
-                    Name = "Test Three",
-                    ShortDescription = "The Weekend Away does away things",
-                    LongDescription =
-                        "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                    ImageUrl = "/img/the_weekend_away.jpg",
-                    Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
-                    Director = "Kim Farrant",
-                    Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
-                };
-                context.AddRange(one, two, three);
-                context.SaveChanges();
-            }
+            var three = new Movie()
+            {
+                Name = "Test Three",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
+            _context.AddRange(one, two, three);
+            _context.SaveChanges();
+            _context.ChangeTracker.Clear();
         }
-        #endregion
 
 
 
         [Fact]
         public void Test_Create_GET_ReturnsViewResultNullModel()
         {
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
-            {
-                // Arrange
-                var controller = new MoviesController(context);
+            // Arrange
+            var controller = new MoviesController(_context);
 
-                // Act
-                var result = controller.Create();
+            // Act
+            var result = controller.Create();
 
-                // Assert
-                var viewResult = Assert.IsType<ViewResult>(result);
-                Assert.Null(viewResult.ViewData.Model);
-            }
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewData.Model);
         }
 
         [Fact]
         public async Task Test_Update_POST_ReturnsViewResult_ValidModelState()
         {
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
+            // Arrange
+            var movie = new MovieDto()
             {
-                // Arrange
-                
-                var movie = new MovieDto()
-                {
-                    Name = "The Weekend Away",
-                    ShortDescription = "The Weekend Away does away things",
-                    LongDescription =
-                        "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                    ImageUrl = "/img/the_weekend_away.jpg",
-                    Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
-                    Director = "Kim Farrant",
-                    Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
-                };
-                var controller = new MoviesController(context);
+                MovieId = 2,
+                Name = "The Weekend Away",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
+            var controller = new MoviesController(_context);
 
-                // Act
-                var result = await controller.Create(movie);
+            // Act
+            var result = await controller.Edit(2, movie);
 
-                // Assert
-                var viewResult = Assert.IsType<ViewResult>(result);
-                var model = Assert.IsAssignableFrom<Movie>(viewResult.ViewData.Model);
-                Assert.Equal(movie.Name, model.Name);
-                Assert.Equal(movie.ShortDescription, model.ShortDescription);
-            }
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<MovieDto>(viewResult.ViewData.Model);
+            Assert.Equal(movie.Name, model.Name);
+            Assert.Equal(movie.ShortDescription, model.ShortDescription);
         }
 
         [Fact]
         public async Task Test_MovieControllerPostTask()
         {
             // Arrange
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
+            var controller = new MoviesController(_context);
+            var movie = new MovieDto()
             {
-                var controller = new MoviesController(context);
-                var movie = new MovieDto()
-                {
-                    Name = "The Weekend Away",
-                    ShortDescription = "The Weekend Away does away things",
-                    LongDescription =
-                        "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                    ImageUrl = "/img/the_weekend_away.jpg",
-                    Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
-                    Director = "Kim Farrant",
-                    Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
-                };
-                var result = await controller.Create(movie);
+                Name = "The Weekend Away",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
+            var result = await controller.Create(movie);
 
-                Assert.NotNull(context.Movies.FirstOrDefault(x => x.Name == movie.Name));
-            }
+            Assert.NotNull(_context.Movies.FirstOrDefault(x => x.Name == movie.Name));
         }
 
         [Fact]
         public async Task Test_Create_POST_ValidModelState()
         {
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
+            // Arrange
+            var r = new MovieDto()
+            {
+                Name = "The Weekend Away",
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Genre = "Crime",
+                AgeRestriction = "14",
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+                Language = "Engels"
+            };
+
+            var controller = new MoviesController(_context);
+
+            // Act
+            var result = await controller.Create(r);
+
+            // Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(redirectToActionResult.ControllerName);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+        }
+
+        [Fact]
+        public async Task Test_Index_GET_ReturnsViewResult_WithAListOfMovies()
+        {
+            // Arrange
+            var controller = new MoviesController(_context);
+
+            // Act
+            var result = await controller.Index();
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<IEnumerable<Movie>>(viewResult.ViewData.Model);
+            Assert.Equal(3, model.Count());
+        }
+
+        [Fact]
+        public async Task Test_Create_POST_InvalidModelState()
+        {
+            // Arrange
+            var movie = new MovieDto()
+            {
+                ShortDescription = "The Weekend Away does away things",
+                LongDescription =
+                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
+                ImageUrl = "/img/the_weekend_away.jpg",
+                Duration = new TimeSpan(2, 15, 30),
+                Director = "Kim Farrant",
+                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
+
+            };
+            var controller = new MoviesController(_context);
+            controller.ModelState.AddModelError("Name", "Name is required");
+
+            // Act
+            var result = await controller.Create(movie);
+
+            // Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<MovieDto>(viewResult.ViewData.Model);
+            Assert.Null(model.Name);
+        }
+
+        [Fact]
+        public async Task Test_Update_POST_ReturnsViewResult_InValidModelState()
+        {
             {
                 // Arrange
-                var r = new MovieDto()
+
+                var movie = new MovieDto()
                 {
-                    Name = "The Weekend Away",
+                    MovieId = 2,
                     ShortDescription = "The Weekend Away does away things",
                     LongDescription =
                         "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
                     ImageUrl = "/img/the_weekend_away.jpg",
                     Duration = new TimeSpan(2, 15, 30),
-                    Genre = "Crime",
-                    AgeRestriction = "14",
                     Director = "Kim Farrant",
                     Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
-                    Language = "Engels"
                 };
-
-                var controller = new MoviesController(context);
+                var controller = new MoviesController(_context);
+                controller.ModelState.AddModelError("Name", "Name is required");
 
                 // Act
-                var result = await controller.Create(r);
+                var result = await controller.Edit(2, movie);
+
+                // Assert
+                var viewResult = Assert.IsType<ViewResult>(result);
+                var model = Assert.IsAssignableFrom<MovieDto>(viewResult.ViewData.Model);
+                Assert.Equal(movie.Director, model.Director);
+            }
+        }
+
+        [Fact]
+        public async Task Test_Delete_POST_ReturnsViewResult_InValidModelState()
+        {
+            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
+            {
+                // Arrange
+                int testId = 1;
+
+                var controller = new MoviesController(_context);
+
+                // Act
+                var result = await controller.DeleteConfirmed(testId);
 
                 // Assert
                 var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
                 Assert.Null(redirectToActionResult.ControllerName);
                 Assert.Equal("Index", redirectToActionResult.ActionName);
-            }
-        }
-
-        [Fact]
-        public async void Test_Index_GET_ReturnsViewResult_WithAListOfMovies()
-        {
-            using (var context = new MovieTheatreDatabaseContext(ContextOptions))
-            {
-                // Arrange
-                var controller = new MoviesController(context);
-
-                // Act
-                var result = controller.Index();
-
-                // Assert
-                var viewResult = Assert.IsType<ViewResult>(result);
-                var model = Assert.IsAssignableFrom<IEnumerable<Movie>>(viewResult.ViewData.Model);
-                Assert.Equal(17, model.Count());
             }
         }
     }

@@ -14,7 +14,7 @@ namespace MovieTheatreWebsiteUnitTest
         public InMemoryTest()
             : base(
                 new DbContextOptionsBuilder<MovieTheatreDatabaseContext>()
-                    .UseInMemoryDatabase("TestDatabase")
+                    .UseInMemoryDatabase("InMemoryDb")
                     .Options)
         {
         }

@@ -80,34 +80,7 @@ namespace MovieTheatreWebsite.Tests
 
         }
 
-        [Fact]
-        public async Task Test_Create_POST_InvalidModelState()
-        {
-            // Arrange
-            var movie = new MovieDto()
-            {
-                MovieId = 3,
-                Name = "The Weekend Away",
-                ShortDescription = "The Weekend Away does away things",
-                LongDescription =
-                    "A weekend getaway to Croatia goes awry when a woman (Leighton Meester) is accused of killing her best friend (Christina Wolfe) and her efforts to get to the truth uncover a painful secret.",
-                ImageUrl = "/img/the_weekend_away.jpg",
-                Duration = new TimeSpan(2, 15, 30),
-                Director = "Kim Farrant",
-                Stars = "Leighton Meester, Christina Wolfe, Ziad Barki",
 
-            };
-            var controller = new MoviesController(_context);
-            controller.ModelState.AddModelError("Name", "Name is required");
-
-            // Act
-            var result = await controller.Create(movie);
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.Null(viewResult.ViewData.Model);
-
-        }
     }
 }
 
