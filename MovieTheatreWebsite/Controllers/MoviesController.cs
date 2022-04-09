@@ -84,7 +84,7 @@ namespace MovieTheatreWebsite.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MovieId, Name,ShortDescription,LongDescription,ImageUrl,Duration")] MovieDto movie)
+        public async Task<IActionResult> Edit(int id, [Bind("MovieId, Name, ShortDescription, LongDescription, ImageUrl, Genre, AgeRestriction, Language, Duration, Director, Stars")] MovieDto movie)
         {
             if (id != movie.MovieId)
             {
@@ -109,7 +109,7 @@ namespace MovieTheatreWebsite.Controllers
                         throw;
                     }
                 }
-                return View(movie);
+                return RedirectToAction(nameof(Index));
             }
             return View(movie);
         }

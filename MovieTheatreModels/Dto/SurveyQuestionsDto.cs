@@ -9,7 +9,7 @@ namespace MovieTheatreModels.Dto
         public string Text { get; set; }
         public string QuestionType { get; set; }
 
-        //Map a MovieDto object to a Movie Object
+
         public SurveyQuestion ToDb() =>
             new()
             {

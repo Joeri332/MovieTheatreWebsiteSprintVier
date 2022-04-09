@@ -44,23 +44,9 @@ namespace MovieTheatreWebsite.Controllers
                 }
             }
 
-            //If movies are not part of movietheatreroom, don't forget to add them in the end
-            //foreach (var movie in _context.Movies)
-            //{
-            //    if (!movieList.Contains(movie))
-            //        movieList.Add(movie);
-            //}
-
             ViewData["MovieTheatreRooms"] = movieTheatreRoomsList;
             return View(movieList);
         }
-
-
-        //public ActionResult Index(string age, string genre)
-        //{
-        //    return null;
-        //}
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -125,11 +111,7 @@ namespace MovieTheatreWebsite.Controllers
             reservationObj.Prices = voucher != null ? voucher.Price : price;
 
             ViewData["Voucher"] = voucher;
-            // TODO Hierdoor werkt visual hidden niet op de PIN payment butten
-            //if (voucherCode == null)
-            //{
-            //    ViewData["Voucher"] = "";
-            //}
+
             ViewData["VoucherCode"] = voucherCode;
 
             //Filter types of prices dependant on movie Movie DurationType on both prices and movies
@@ -217,11 +199,6 @@ namespace MovieTheatreWebsite.Controllers
             reservation.ChairCount = reservationChairCount;
             reservation.PriceIdSpecial = priceIdSpecial;
 
-            //if (priceIdSpecial != null)
-            //{
-            //    reservation.PriceIdSpecial = priceIdSpecial;
-            //}
-
             var reservationObj = DetailsInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode, chairCount, automaticMode, checkBoxChairsValues, reservation);
 
             if (!chairCountSuccess)
@@ -261,12 +238,10 @@ namespace MovieTheatreWebsite.Controllers
             }
             if (!reservationChairCountSuccess)
             {
-                //todo Possibly via validation field instead of tempData Error, when time allows.
+
                 TempData["error"] = "NO MORE SPACE. Only " + availableChairNrList.Count + " more seats available";
             }
 
-            //TODO Check the right price (with voucher, without voucher)
-            //TODO Without voucher you'll get the right price, with voucher, probably not
             if (ModelState.IsValid && chairCountSuccess && reservationChairCountSuccess)
             {
                 var reservationDb = _context.Reservations.Add(reservation.ToDb());
@@ -290,10 +265,6 @@ namespace MovieTheatreWebsite.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                //Use routevaluedictionary, otherwise a single value won't work
-                //return RedirectToAction(nameof(ReservationConfirmation), new RouteValueDictionary(new { reservationDb.Entity.ReservationGuid }));
-
-
 
                 //stripe settings
                 if (reservationObj.Prices.Amount != 0 || priceIdSpecial != null)
@@ -429,6 +400,7 @@ namespace MovieTheatreWebsite.Controllers
                 .ToList();
 
             var takenChairsFromSelectedReservations = takenChairsAllReservations.Where(x => x.ReservationId == reservation?.ReservationId).Select(x => x.ChairNr).ToList();
+            ViewData["takenchairs1"] = takenChairsFromSelectedReservations.Count;
 
             var takenChairs = takenChairsAllReservations.Select(x => x.ChairNr).ToList();
             var selectedChairs = takenChairs.ToList();
@@ -438,8 +410,8 @@ namespace MovieTheatreWebsite.Controllers
             ViewData["SelectedChairs"] = selectedChairs;
 
             return reservationObj;
-        } 
-        
+        }
+
         // Getting the attrubutes from the url including the state of the dropdown
         [Authorize(Roles = "Admin, Manager, Cashier")]
         public IActionResult ReservationSeatChange(int movieTheatreRoomId, int? reservationGuid)
@@ -467,18 +439,26 @@ namespace MovieTheatreWebsite.Controllers
                 .Where(x => x.ReservationId == ChairNrInt)
                 .ToList();
 
-            foreach (var chairNr in listOfChainrs)
-            {
-                _context.Remove(chairNr);
-                await _context.SaveChangesAsync();
-            }
-
             var chosenChairs = checkBoxChairsStringValue.ToString().Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
+            
+            if (chosenChairs.Count <= (ViewData["takenchairs1"] as int? ))
+            {
+                foreach (var chairNr in listOfChainrs)
+                {
+                    _context.Remove(chairNr);
+                    await _context.SaveChangesAsync();
+                }
 
-            foreach (int item in chosenChairs)
-             {
-                _context.ReservationChairNr.Add(new ReservationChairNr(ChairNrInt, item));
-                await _context.SaveChangesAsync();
+                foreach (int item in chosenChairs)
+                {
+                    _context.ReservationChairNr.Add(new ReservationChairNr(ChairNrInt, item));
+                    await _context.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                TempData["error"] = "You have selected " + (chosenChairs.Count - (ViewData["takenchairs1"] as int?) ) +
+                                    " More than the original reservation";
             }
 
 

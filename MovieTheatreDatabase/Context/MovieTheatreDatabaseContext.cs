@@ -249,7 +249,6 @@ namespace MovieTheatreDatabase
                     Language = "Engels"
                 });
 
-            // TODO maybe translation table for less data pollution, otherwise this is fine.
             modelBuilder.Entity<User>().HasData(
                 new User() { UserId = 1, Username = "Sjaak", Email = "Sjaak123@hotmail.com" }
             );

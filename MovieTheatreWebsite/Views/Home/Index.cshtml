@@ -12,27 +12,6 @@
 	 data-mdb-ride="carousel">
 </div>
 
-<div class="filter-row">
-	<form method="POST" id="filter">
-		<select name="genre">
-			@foreach (var movie in Model) { 
-				<option value="@Html.DisplayFor(modelItem => movie.Genre)">@Html.DisplayFor(modelItem => movie.Genre)</option>
-			}
-		</select>
-		<select name="language">
-			@foreach (var movie in Model) { 
-				<option value="@Html.DisplayFor(modelItem => movie.Language)">@Html.DisplayFor(modelItem => movie.Language)</option>
-			}
-		</select>
-		<select name="age-restriction">
-			@foreach (var movie in Model) { 
-				<option value="@Html.DisplayFor(modelItem => movie.AgeRestriction)">@Html.DisplayFor(modelItem => movie.AgeRestriction)</option>
-			}
-		</select>
-		
-	</form>
-</div>
-
 <a asp-action="SecretMovie" class="btn btn-primary form-control mt-3">Secret Movie</a>
 
 
@@ -56,24 +35,25 @@
 								}
 								<img src=@Html.DisplayFor(modelItem => ageRestriction) class="float-right" />
 								<h5 class="card-title">@Html.DisplayFor(modelItem => movie.Name)</h5>
-								<p class="card-text">
-									@Html.DisplayFor(modelItem => movie.ShortDescription)
-									@foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
-									{
-										<br />
-										@:Room:
-										@movieTheatreRoom.TheatreRoom.Name
-										@:::
-										@movieTheatreRoom.DateTime.ToString("g")
-										@:::
-										@Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
-									    <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
-									}
-								</p>
+                                <p class="card-text">
+                                    @Html.DisplayFor(modelItem => movie.ShortDescription)
+                                    @foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
+                                    {
+                                        <br />
+                                        @:Room:
+                                        @movieTheatreRoom.TheatreRoom.Name
+                                        @:::
+                                        @movieTheatreRoom.DateTime.ToString("g")
+                                        @:::
+                                        @Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
+                                        {
+                                            <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
+                                        }
+                                    }
+                                </p>
 
-								@* <a href="Movies/Details/@movie.MovieId" class="btn btn-primary">Informatie</a>*@
-
-								@foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
+                                @foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
 								{
 									<a asp-action="Details" class="btn btn-primary form-control" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId">Reserveren</a>
 								}

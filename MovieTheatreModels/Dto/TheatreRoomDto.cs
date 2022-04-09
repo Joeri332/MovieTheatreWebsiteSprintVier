@@ -9,7 +9,7 @@ namespace MovieTheatreModels.Dto
         public string Name { get; set; }
         public int ChairCount { get; set; }
 
-        //Map a MovieDto object to a Movie Object
+   
         public TheatreRoom ToDb() =>
             new()
             {

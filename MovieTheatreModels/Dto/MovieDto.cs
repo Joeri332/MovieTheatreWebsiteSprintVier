@@ -18,7 +18,6 @@ namespace MovieTheatreModels.Dto
 
         public TimeSpan Duration { get; set; }
 
-        //Map a MovieDto object to a Movie Object
         public Movie ToDb() =>
             new()
             {

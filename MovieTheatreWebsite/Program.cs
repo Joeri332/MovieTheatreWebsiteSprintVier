@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddDbContext<MovieTheatreDatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MovieTheatreWebsiteContext"))
-        .UseInMemoryDatabase("InMemoryDb"));
+        );
 
 builder.Services
     .AddDefaultIdentity<IdentityUser>()

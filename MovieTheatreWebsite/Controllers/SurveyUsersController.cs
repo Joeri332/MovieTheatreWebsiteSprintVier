@@ -209,6 +209,7 @@ namespace MovieTheatreWebsite.Controllers
             {
                 success = Request.Form.TryGetValue(surveyQuestion.SurveyQuestionId.ToString(), out var stringValue);
                 success = int.TryParse(stringValue, out var optionsEnumInt) && success;
+
                 if (!success)
                     return RedirectToAction(nameof(SurveyPageIndex));
 
@@ -223,7 +224,8 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             await transaction.CommitAsync();
-            return View(survey);
+            return View();
         }
     }
+
 }

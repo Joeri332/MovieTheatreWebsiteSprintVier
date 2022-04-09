@@ -2,46 +2,10 @@
 @using MovieTheatreDatabase
 @model MovieTheatreDatabase.Reservation
 <style>
-    input[type=checkbox] {
-        -moz-appearance:none;
-        -webkit-appearance:none;
-        -o-appearance:none;
-        outline: none;
-        content: none;	
-
-    }
-
-    input[type=checkbox]:before {
-        content: "\f00c";
-        font-size: 15px;
-        color: transparent !important;
-        background: #fef2e0;
-        display: block;
-        width: 15px;
-        height: 15px;
-        border: 1px solid black;
-        margin-right: 7px;
-        background-color: gray;
-
-    }
-
-    input[type=checkbox]:checked:before {
-      
-        background-color: green;
-
-    }
-    
-    .checkBoxChairsClass1:before {
-      
-        background-color: red !important;
-
-    }
-
     .seats {
         text-align: center;
         width: 750px;
     }
-
 </style>
 
 @for (int i = 1; i <= @Model.MovieTheatreRoom.TheatreRoom.ChairCount; i++)
@@ -69,7 +33,7 @@
         case 30:
         case 40:
         case 50:
-            <br/>
+            <br />
             break;
 
         default:

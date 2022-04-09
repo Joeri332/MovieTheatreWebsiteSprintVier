@@ -11,7 +11,6 @@ namespace MovieTheatreModels.Dto
         public int PriceId  { get; set; }
         public int ChairCount { get; set; }
 
-        //Map a MovieDto object to a Movie Object
         public Reservation ToDb() =>
             new()
             {

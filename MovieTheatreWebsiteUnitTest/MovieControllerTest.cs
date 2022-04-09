@@ -15,13 +15,14 @@ using Xunit;
 
 namespace MovieTheatreWebsite.Tests
 {
-    public abstract class MovieControllerTest
+    public class MovieControllerTest
     {
-
-
-        public MovieControllerTest(DbContextOptions<MovieTheatreDatabaseContext> contextOptions)
+        public MovieControllerTest()
         {
-            ContextOptions = contextOptions;
+            ContextOptions = new DbContextOptionsBuilder<MovieTheatreDatabaseContext>()
+                .UseInMemoryDatabase("InMemoryDb")
+                .Options;
+            _context = new MovieTheatreDatabaseContext(ContextOptions);
             Seed();
         }
 
@@ -29,11 +30,10 @@ namespace MovieTheatreWebsite.Tests
         private MovieTheatreDatabaseContext _context { get; set; }
         private void Seed()
         {
-            _context = new MovieTheatreDatabaseContext(ContextOptions);
             _context.Database.EnsureDeleted();
 
             var one = new Movie()
-            {
+            { 
                 Name = "Test One",
                 ShortDescription = "The Weekend Away does away things",
                 LongDescription =
@@ -122,10 +122,9 @@ namespace MovieTheatreWebsite.Tests
             var result = await controller.Edit(2, movie);
 
             // Assert
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<MovieDto>(viewResult.ViewData.Model);
-            Assert.Equal(movie.Name, model.Name);
-            Assert.Equal(movie.ShortDescription, model.ShortDescription);
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(redirectToActionResult.ControllerName);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
         }
 
         [Fact]

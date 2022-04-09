@@ -10,7 +10,6 @@ namespace MovieTheatreModels.Dto
         public string? Password { get; set; }
         public string Email { get; set; }
 
-        //Map a MovieDto object to a Movie Object
         public User ToDb() =>
             new()
             {

@@ -11,7 +11,6 @@ namespace MovieTheatreModels.Dto
         public DateTime CreatedDate { get; set; }
         public DateTime? ExpiresOn { get; set; }
 
-        //Map a MovieDto object to a Movie Object
         public Survey ToDb() =>
             new()
             {

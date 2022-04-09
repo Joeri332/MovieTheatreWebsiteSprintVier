@@ -168,7 +168,6 @@
                     }, 1000);
                 };
 
-                //$('.voucherCode').keyup(update);
                 $('.voucherCode').change(update);
                 $('.chairCount').change(update);
             }());
@@ -199,11 +198,6 @@
             $.each($("#checkBoxChairs:checked"), function(){
                 checkboxValueList.push($(this).val());
             });
-            /*$.each($(".checkBoxChairsClass"), function(){
-                if ($(this).data("npChecked") == "1") {
-                    checkboxValueList.push($(this).val());
-                }
-            });*/
             return $.distinct(checkboxValueList).join(",");
         }
     </script>
