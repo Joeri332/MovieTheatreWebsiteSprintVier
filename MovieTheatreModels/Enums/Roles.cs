@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MovieTheatreModels.Enums
+﻿namespace MovieTheatreModels.Enums
 {
     public enum Roles
     {

@@ -1,9 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -187,7 +182,7 @@ namespace MovieTheatreWebsite.Controllers
                 return RedirectToAction(nameof(SurveyPageIndex));
             }
 
-            var success = Request.Form.TryGetValue("Name", out var stringValueName);
+          var success = Request.Form.TryGetValue("Name", out var stringValueName);
             success = Request.Form.TryGetValue("Email", out var stringValueEmail) && success;
 
             if (!success)
@@ -209,9 +204,10 @@ namespace MovieTheatreWebsite.Controllers
             {
                 success = Request.Form.TryGetValue(surveyQuestion.SurveyQuestionId.ToString(), out var stringValue);
                 success = int.TryParse(stringValue, out var optionsEnumInt) && success;
-
                 if (!success)
-                    return RedirectToAction(nameof(SurveyPageIndex));
+                {
+                    return View(survey);
+                }
 
                 var surveyUserAnswer = new SurveyUserAnswer
                 {
@@ -224,7 +220,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             await transaction.CommitAsync();
-            return View(survey);
+            return RedirectToAction(nameof(SurveyPageIndex));
         }
     }
 
