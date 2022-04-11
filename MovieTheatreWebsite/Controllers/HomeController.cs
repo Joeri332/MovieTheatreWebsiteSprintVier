@@ -33,6 +33,7 @@ namespace MovieTheatreWebsite.Controllers
                     .Where(x => x.DateTime > DateTime.Now && x.DateTime < DateTime.Now.AddDays(7)) //Only show movies between today and next week
                     .OrderBy(x => x.DateTime).ToList();
 
+
             var movieList = new List<Movie>();
             foreach (var movieTheatreRoom in movieTheatreRoomsList)
             {
@@ -42,7 +43,12 @@ namespace MovieTheatreWebsite.Controllers
                 {
                     movieList.Add(movie);
                 }
+
             }
+
+            var AddListOfTakenChairs = _context.ReservationChairNr;
+       
+            ViewData["AddListOfTakenChairs"] = AddListOfTakenChairs;
 
             ViewData["MovieTheatreRooms"] = movieTheatreRoomsList;
             return View(movieList);

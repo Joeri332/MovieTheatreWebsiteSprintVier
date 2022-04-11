@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<MovieTheatreDatabase.Movie>
 @using MovieTheatreDatabase
 @using MovieTheatreWebsite.Statics
+@using Microsoft.CodeAnalysis.CSharp.Syntax
 
 
 @{
@@ -47,6 +48,7 @@
                                         @:::
                                         @Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
                                         @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
+										@movieTheatreRoom.TheatreRoom.ChairCount
                                         {
                                             <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
                                         }

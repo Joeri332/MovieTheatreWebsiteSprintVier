@@ -404,7 +404,13 @@ namespace MovieTheatreDatabase
             );
 
             modelBuilder.Entity<Survey>().HasData(
-                new Survey() { SurveyId = 1, Name = "MovieTheatre Survey", Description = "Experience Survey", CreatedDate = datetime }
+                new Survey() { SurveyId = 1, Name = "MovieTheatre Survey", Description = "Customers", CreatedDate = datetime }
+            );
+            modelBuilder.Entity<Survey>().HasData(
+                new Survey() { SurveyId = 2, Name = "Employee Survey wellbeing", Description = "Employee", CreatedDate = datetime }
+            );
+            modelBuilder.Entity<Survey>().HasData(
+                new Survey() { SurveyId = 3, Name = "Website functionality", Description = "Manager", CreatedDate = datetime }
             );
 
             modelBuilder.Entity<SurveyQuestion>().HasData(
@@ -423,6 +429,43 @@ namespace MovieTheatreDatabase
             modelBuilder.Entity<SurveyQuestion>().HasData(
                 new SurveyQuestion() { SurveyQuestionId = 5, SurveyId = 1, Text = "What was your overall experience?", QuestionType = "Experience" }
             );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 6, SurveyId = 2, Text = "Is there a good work environment?", QuestionType = "Experience" }
+            );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 7, SurveyId = 2, Text = "How's the pay?", QuestionType = "Employee" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 8, SurveyId = 2, Text = "Do you like your work?", QuestionType = "Employee" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 9, SurveyId = 2, Text = "How is the management?", QuestionType = "Employee" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 10, SurveyId = 2, Text = "What is your overall experience?", QuestionType = "Employee" }
+            );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 11, SurveyId = 3, Text = "What was your overall experience?", QuestionType = "Experience" }
+            );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 12, SurveyId = 3, Text = "How are the functionalities of the website?", QuestionType = "Experience" }
+            );
+
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 13, SurveyId = 3, Text = "How is the quality of the website?", QuestionType = "Employee" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 14, SurveyId = 3, Text = "Is the website easy to use?", QuestionType = "Employee" }
+            );
+            modelBuilder.Entity<SurveyQuestion>().HasData(
+                new SurveyQuestion() { SurveyQuestionId = 15, SurveyId = 3, Text = "How is the management?", QuestionType = "Employee" }
+            );
+       
+
             modelBuilder.Entity<ReservationChairNr>().HasData(
                 new ReservationChairNr(1, 1),
                 new ReservationChairNr(1, 2),

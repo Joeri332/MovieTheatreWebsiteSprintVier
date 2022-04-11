@@ -224,7 +224,7 @@ namespace MovieTheatreWebsite.Controllers
             }
 
             await transaction.CommitAsync();
-            return View();
+            return View(survey);
         }
     }
 

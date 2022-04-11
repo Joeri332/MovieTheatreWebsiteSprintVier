@@ -1,4 +1,6 @@
-﻿@model List<MovieTheatreDatabase.Survey>
+﻿@using Microsoft.AspNetCore.Authorization
+@model List<MovieTheatreDatabase.Survey>
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Create";
@@ -7,15 +9,41 @@
 
 
 
-<div>
-    @foreach (var survey in @Model)
+<br />
+<h2>Customer Surveys</h2>
+<br />
+@foreach (var survey in @Model.Where(x => x.Description.Equals("Customers")))
+{
+
+    <a asp-action="SurveyPageDetails" class="btn btn-primary form-control" asp-route-SurveyId="@survey.SurveyId">@survey.Name</a>
+    <br />
+
+}
+
+@if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
+{
+    <br />
+    <h2>Employee Surveys</h2>
+    <br />
+    @foreach (var survey in @Model.Where(x => x.Description.Equals("Employee")))
     {
-       
         <a asp-action="SurveyPageDetails" class="btn btn-primary form-control" asp-route-SurveyId="@survey.SurveyId">@survey.Name</a>
     }
-    
-</div>
+}
+
+@if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+{
+    <br />
+    <h2>Manager Surveys</h2>
+    <br />
+    @foreach (var survey in @Model.Where(x => x.Description.Equals("Manager")))
+    {
+        <a asp-action="SurveyPageDetails" class="btn btn-primary form-control" asp-route-SurveyId="@survey.SurveyId">@survey.Name</a>
+    }
+}
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
 }
