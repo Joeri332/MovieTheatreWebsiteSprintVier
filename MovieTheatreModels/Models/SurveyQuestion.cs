@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MovieTheatreModels.Enums;
 
 namespace MovieTheatreDatabase
 {

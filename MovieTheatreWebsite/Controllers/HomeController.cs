@@ -9,7 +9,6 @@ using MovieTheatreModels.Dto;
 using MovieTheatreModels.Enums;
 using static MovieTheatreWebsite.Statics.Statics;
 using Stripe.Checkout;
-using MovieTheatreModels.ViewModels;
 
 namespace MovieTheatreWebsite.Controllers
 {
@@ -30,6 +29,7 @@ namespace MovieTheatreWebsite.Controllers
             var movieTheatreRoomsList =
                 _context.MovieTheatreRooms
                     .Include(x => x.TheatreRoom)
+                    .Include(x=> x.Reservations).ThenInclude(x => x.ReservationChairNr)
                     .Where(x => x.DateTime > DateTime.Now && x.DateTime < DateTime.Now.AddDays(7)) //Only show movies between today and next week
                     .OrderBy(x => x.DateTime).ToList();
 
@@ -45,10 +45,6 @@ namespace MovieTheatreWebsite.Controllers
                 }
 
             }
-
-            var AddListOfTakenChairs = _context.ReservationChairNr;
-       
-            ViewData["AddListOfTakenChairs"] = AddListOfTakenChairs;
 
             ViewData["MovieTheatreRooms"] = movieTheatreRoomsList;
             return View(movieList);
@@ -95,8 +91,9 @@ namespace MovieTheatreWebsite.Controllers
                 .Select(x => x.ChairNr)
                 .ToList();
 
+            //takenChairs is all the red chairs
             ViewData["takenChairs"] = takenChairs;
-
+                              //CheckboxChairs is url checkbox value
             var chosenChairs = checkBoxChairs?.Split(',').Select(int.Parse).Except(takenChairs).ToList() ?? new List<int>();
 
             var selectedChairs = takenChairs.ToList();
@@ -106,6 +103,7 @@ namespace MovieTheatreWebsite.Controllers
                 selectedChairs = selectedChairs.Distinct().ToList();
             }
 
+            //SelectedChairs is all the red and green chairs together
             ViewData["SelectedChairs"] = selectedChairs;
 
             var price = _context.Prices.FirstOrDefault(x => x.PriceId == priceId) ?? _context.Prices.First(x => x.PriceType == priceType);
@@ -155,12 +153,6 @@ namespace MovieTheatreWebsite.Controllers
                     ViewData["ChairCount"] = reservation?.ChairCount > 0 ? reservation.ChairCount : chairCount ?? 1;
                 }
             }
-
-
-
-
-
-
 
             ViewData["SpecialArrangements"] = new SelectList(_context.Prices.Where(x => x.PriceType == PriceCategory.SpecialArrangements), "PriceId", "Name");
 
@@ -405,14 +397,17 @@ namespace MovieTheatreWebsite.Controllers
                 .Where(x => x.Reservation.MovieTheatreRoom.MovieTheatreRoomId == movieTheatreRoomId)
                 .ToList();
 
+            //Filtering all already taken chairs down to the taken chairs from the selected reservation
             var takenChairsFromSelectedReservations = takenChairsAllReservations.Where(x => x.ReservationId == reservation?.ReservationId).Select(x => x.ChairNr).ToList();
             ViewData["takenchairs1"] = takenChairsFromSelectedReservations.Count;
 
             var takenChairs = takenChairsAllReservations.Select(x => x.ChairNr).ToList();
             var selectedChairs = takenChairs.ToList();
 
+            //The red chairs
             ViewData["takenChairs"] = takenChairs.Except(takenChairsFromSelectedReservations).ToList();
 
+            //All chairs
             ViewData["SelectedChairs"] = selectedChairs;
 
             return reservationObj;
@@ -447,7 +442,7 @@ namespace MovieTheatreWebsite.Controllers
 
             var chosenChairs = checkBoxChairsStringValue.ToString().Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
             
-            if (chosenChairs.Count <= (ViewData["takenchairs1"] as int? ))
+            if (chosenChairs.Count == (ViewData["takenchairs1"] as int? ))
             {
                 foreach (var chairNr in listOfChainrs)
                 {

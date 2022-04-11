@@ -1,7 +1,4 @@
-﻿using System.Data;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
 
 public class ChartPage : Controller
 {
