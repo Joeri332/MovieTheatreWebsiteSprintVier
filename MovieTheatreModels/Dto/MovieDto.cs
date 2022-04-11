@@ -1,4 +1,5 @@
-﻿using MovieTheatreDatabase;
+﻿using System.ComponentModel.DataAnnotations;
+using MovieTheatreDatabase;
 
 namespace MovieTheatreModels.Dto
 {

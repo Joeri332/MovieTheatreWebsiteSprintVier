@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using MovieTheatreDatabase;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MovieTheatreDatabase;
 using MovieTheatreModels.Dto;
 using MovieTheatreWebsite.Controllers;
+using NSubstitute;
 using Xunit;
 
-namespace MovieTheatreWebsiteUnitTest
+
+
+namespace MovieTheatreWebsite.Tests
 {
     public class MovieControllerTest
     {
         public MovieControllerTest()
         {
             ContextOptions = new DbContextOptionsBuilder<MovieTheatreDatabaseContext>()
-                .UseInMemoryDatabase("MovieControllerTestDb")
+                .UseInMemoryDatabase("InMemoryDb")
                 .Options;
             _context = new MovieTheatreDatabaseContext(ContextOptions);
             Seed();

@@ -1,4 +1,6 @@
 ﻿@using MovieTheatreModels.Enums
+@using MovieTheatreDatabase
+@using System.Security.Policy
 @using Microsoft.AspNetCore.Identity
 @model MovieTheatreDatabase.Survey
 @inject SignInManager<IdentityUser> SignInManager
@@ -15,8 +17,8 @@
     {   
         <div class="form-group">
             <label asp-for="SurveyQuestions" class="control-label">@surveyQuestion.Text</label>
-            <select name="@surveyQuestion.SurveyQuestionId" class="form-control" asp-items="Html.GetEnumSelectList<QuestionOptionEnums>()" required> <Option value="">-- Please select one --</Option></select> 
-            <span asp-validation-for="@surveyQuestion.SurveyQuestionId" class="text-danger"></span>
+            <select name="@surveyQuestion.SurveyQuestionId" class="form-control" asp-items="Html.GetEnumSelectList<QuestionOptionEnums>()"> <Option value="">-- Please select one --</Option></select> 
+            <span asp-validation-for="@surveyQuestion" class="text-danger"></span>
         </div>
     }
     

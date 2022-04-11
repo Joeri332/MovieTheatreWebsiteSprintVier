@@ -1,4 +1,10 @@
-﻿namespace MovieTheatreModels.ViewModels.Administration
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MovieTheatreModels.ViewModels.Administration
 {
     public class UserRoleViewModel
     {

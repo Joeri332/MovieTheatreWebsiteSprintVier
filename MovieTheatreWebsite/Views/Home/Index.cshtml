@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<MovieTheatreDatabase.Movie>
 @using MovieTheatreDatabase
 @using MovieTheatreWebsite.Statics
+@using Microsoft.CodeAnalysis.CSharp.Syntax
 
 
 @{
@@ -46,16 +47,12 @@
                                         @movieTheatreRoom.DateTime.ToString("g")
                                         @:::
                                         @Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
-										<br />
-										@:Available Seats:
-										@(movieTheatreRoom.TheatreRoom.ChairCount - movieTheatreRoom.Reservations.Sum(x => x.ReservationChairNr.Count()))
-										@if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
-										{
-											{
-												<a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
-											}
-										}
-									}
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
+										@movieTheatreRoom.TheatreRoom.ChairCount
+                                        {
+                                            <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
+                                        }
+                                    }
                                 </p>
 
                                 @foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
