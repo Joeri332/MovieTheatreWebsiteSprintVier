@@ -17,67 +17,67 @@
 
 <div class="carousel-inner py-4">
 
-	<!-- TODO Work in progress -->
-	<div class="carousel-item active">
-		<div class="container">
-			<div class="row">
+    <div class="carousel-item active">
+        <div class="container">
+            <div class="row">
 
-				@foreach (var movie in Model)
-				{
-					<div class="col-md-4">
-						<div class="card">
-							<img src=@Html.DisplayFor(modelItem => movie.ImageUrl)
-							 class="card-img-top"
-							 alt="Waterfall" />
-							<div class="card-body">
-								@{
-									string ageRestriction = movie.GetAgeRestriction();
-								}
-								<img src=@Html.DisplayFor(modelItem => ageRestriction) class="float-right" />
-								<h5 class="card-title">@Html.DisplayFor(modelItem => movie.Name)</h5>
+                @foreach (var movie in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card">
+                            <img src=@Html.DisplayFor(modelItem => movie.ImageUrl)
+                                 class="card-img-top"
+                                 alt="Waterfall"/>
+                            <div class="card-body">
+                                @{
+                                    string ageRestriction = movie.GetAgeRestriction();
+                                }
+                                <img src=@Html.DisplayFor(modelItem => ageRestriction) class="float-right"/>
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => movie.Name)</h5>
                                 <p class="card-text">
                                     @Html.DisplayFor(modelItem => movie.ShortDescription)
                                     @foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
                                     {
-                                        <br />
+                                        <br/>
                                         @:Room:
                                         @movieTheatreRoom.TheatreRoom.Name
                                         @:::
                                         @movieTheatreRoom.DateTime.ToString("g")
                                         @:::
                                         @Statics.GetEnumDescription(movieTheatreRoom.TheatreRoom.TheatreRoomCategory)
-										<br />
-										@:Available Seats:
-										@(movieTheatreRoom.TheatreRoom.ChairCount - movieTheatreRoom.Reservations.Sum(x => x.ReservationChairNr.Count()))
-										@if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
-										{
-											{
-												<a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
-											}
-										}
-									}
+                                        <br/>
+ 
+                                        @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Cashier"))
+                                        {
+                                            {
+                                                @:Available Seats:
+                                                <h1>@(movieTheatreRoom.TheatreRoom.ChairCount - movieTheatreRoom.Reservations.Sum(x => x.ReservationChairNr.Count()))</h1>
+                                                <a asp-action="ReservationSeatChange" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId" class="btn btn-primary form-control mt-3">Change Seatings</a>
+                                            }
+                                        }
+                                    }
                                 </p>
 
                                 @foreach (var movieTheatreRoom in (ViewData["MovieTheatreRooms"] as List<MovieTheatreRoom>).Where(x => x.MovieId == movie.MovieId))
-								{
-									<a asp-action="Details" class="btn btn-primary form-control" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId">Reserveren</a>
-								}
-							</div>
-						</div>
-					</div>
-				}
-			</div>
-		</div>
-	</div>
-	<script>
-	function getFilterFormValues() {
-        var filterFormValues = [];
-        $('#filter').find('option').each(function(){
-            filterFormValues.push($(this).val());
-        });
-        return $.distinct(filterFormValues).join(",");
-    }
-	</script>
+                                {
+                                    <a asp-action="Details" class="btn btn-primary form-control" asp-route-MovieTheatreRoomId="@movieTheatreRoom.MovieTheatreRoomId">Reserveren</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        function getFilterFormValues() {
+            var filterFormValues = [];
+            $('#filter').find('option').each(function() {
+                filterFormValues.push($(this).val());
+            });
+            return $.distinct(filterFormValues).join(",");
+        }
+    </script>
 </div>
 
 

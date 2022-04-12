@@ -14,7 +14,7 @@
 <br />
 @foreach (var survey in @Model.Where(x => x.Description.Equals("Customers")))
 {
-
+    <br />
     <a asp-action="SurveyPageDetails" class="btn btn-primary form-control" asp-route-SurveyId="@survey.SurveyId">@survey.Name</a>
     <br />
 

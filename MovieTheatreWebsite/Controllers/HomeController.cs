@@ -2,6 +2,7 @@
 using MovieTheatreWebsite.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTheatreDatabase;
@@ -196,6 +197,7 @@ namespace MovieTheatreWebsite.Controllers
             chairCountSuccess = int.TryParse(chairCountStringValue, out var reservationChairCount) && chairCountSuccess;
             reservation.ChairCount = reservationChairCount;
             reservation.PriceIdSpecial = priceIdSpecial;
+            
 
             var reservationObj = DetailsInformation(movieTheatreRoomId, priceIdSpecial, priceId, voucherCode, chairCount, automaticMode, checkBoxChairsValues, reservation);
 
@@ -242,6 +244,7 @@ namespace MovieTheatreWebsite.Controllers
 
             if (ModelState.IsValid && chairCountSuccess && reservationChairCountSuccess)
             {
+                
                 var reservationDb = _context.Reservations.Add(reservation.ToDb());
                 await _context.SaveChangesAsync();
 
@@ -386,7 +389,11 @@ namespace MovieTheatreWebsite.Controllers
                 .Include(u => u.TheatreRoom)
                 .First(u => u.MovieTheatreRoomId == movieTheatreRoomId);
 
-            ViewData["SelectReservation"] = new SelectList(_context.Reservations, "ReservationId", "ReservationGuid", reservationGuid);
+
+            ViewData["SelectReservation"] =new SelectList(_context.Reservations
+                .Include(x => x.MovieTheatreRoom)
+                .Where(t => t.MovieTheatreRoomId == movieTheatreRoomId)
+                .ToList(), "ReservationId", "ReservationGuid", reservationGuid);
 
             //Get the selected reservation if not null
             var reservation = _context.Reservations.FirstOrDefault(x => x.ReservationId == reservationGuid);
@@ -399,7 +406,7 @@ namespace MovieTheatreWebsite.Controllers
 
             //Filtering all already taken chairs down to the taken chairs from the selected reservation
             var takenChairsFromSelectedReservations = takenChairsAllReservations.Where(x => x.ReservationId == reservation?.ReservationId).Select(x => x.ChairNr).ToList();
-            ViewData["takenchairs1"] = takenChairsFromSelectedReservations.Count;
+            ViewData["TakenChairsFromSelectedReservationGuid"] = takenChairsFromSelectedReservations.Count;
 
             var takenChairs = takenChairsAllReservations.Select(x => x.ChairNr).ToList();
             var selectedChairs = takenChairs.ToList();
@@ -442,7 +449,7 @@ namespace MovieTheatreWebsite.Controllers
 
             var chosenChairs = checkBoxChairsStringValue.ToString().Split(',').Select(int.Parse).Except((ViewData["takenChairs"] as List<int>)!).ToList();
             
-            if (chosenChairs.Count == (ViewData["takenchairs1"] as int? ))
+            if (chosenChairs.Count == (ViewData["TakenChairsFromSelectedReservationGuid"] as int? ))
             {
                 foreach (var chairNr in listOfChainrs)
                 {

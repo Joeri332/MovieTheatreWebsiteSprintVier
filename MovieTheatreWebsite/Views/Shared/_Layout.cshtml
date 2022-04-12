@@ -17,83 +17,112 @@
 
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieTheatreWebsite</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieTheatreWebsite</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item visually-hidden">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link visually-hidden text-dark" asp-area="" asp-controller="MovieTheatreRooms" asp-action="Index">MovieTheatreRooms</a>
+                        </li>
+                        <li class="nav-item visually-hidden">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Reservations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Create">Subscribe for the newsletter</a>
+                        </li>
+                        <li class="nav-item visually-hidden">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TheatreRooms" asp-action="Index">TheatreRoom</a>
+                        </li>
+                        <li class="nav-item visually-hidden">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="SurveyUsers" asp-action="SurveyPageIndex">Rate us!</a>
+                        </li>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Controls
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" visually-hidden asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  text-dark" asp-area="" asp-controller="MovieTheatreRooms" asp-action="Index">MovieTheatreRooms</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link  text-dark" asp-area="" asp-controller="Administration" asp-action="ListRoles">List Roles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="SurveyUserAnswers" asp-action="Index">SurveysAnswers</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="SurveyQuestions" asp-action="Index">survey questions</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Surveys" asp-action="Index">Surveys</a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                        <partial name="_LoginPartial" />
+                    </ul>
+
+                </div>
+            </div>
+            <div>
+                <label>RESERVATION CODE:</label>
+            </div>
+            <div class="navbar-nav input-group-sm p-lg-3">
+
+                <input id="input1" class="form-control" />
+                <div class="input-group-sm">
+                    <a id="Button1" class="btn btn-dark">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <ul class="navbar-nav custom-icon-size">
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item visually-hidden">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index">Movies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link visually-hidden text-dark" asp-area="" asp-controller="MovieTheatreRooms" asp-action="Index">MovieTheatreRooms</a>
-                    </li>
-                    <li class="nav-item visually-hidden">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Reservations" asp-action="Index">Reservations</a>
+                        <a href="https://www.facebook.com/pathenl" class="text-muted">
+                            <i class="bi bi-facebook"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="User" asp-action="Create">Subscribe for the newsletter</a>
-                    </li>
-                    <li class="nav-item visually-hidden">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TheatreRooms" asp-action="Index">TheatreRoom</a>
-                    </li>
-                    <li class="nav-item visually-hidden">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Prices" asp-action="Index">Prices</a>
+                        <a href="https://www.instagram.com/pathe/?hl=nl" class="text-muted fa-2x">
+                            <i class="bi bi-instagram"></i>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
+                        <a href="https://twitter.com/pathe" class="text-muted fa-2x">
+                            <i class="bi bi-twitter"></i>
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="SurveyUsers" asp-action="SurveyPageIndex">Rate us!</a>
-                    </li>
-                    <partial name="_LoginPartial" />
                 </ul>
-
             </div>
-        </div>
-        <div>
-            <label>RESERVATION CODE:</label>
-        </div> 
-        <div class="navbar-nav input-group-sm p-lg-3">
-                
-            <input id="input1" class="form-control"/>
-            <div class="input-group-sm">
-                <a id="Button1" class="btn btn-dark">
-                    <i class="bi bi-search"></i>
-                </a>
-            </div>
-        </div>
-        <div>
-            <ul class="navbar-nav custom-icon-size">
-                <li class="nav-item">
-                    <a href="https://www.facebook.com/pathenl" class="text-muted">
-                        <i class="bi bi-facebook"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://www.instagram.com/pathe/?hl=nl" class="text-muted fa-2x">
-                        <i class="bi bi-instagram"></i>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="https://twitter.com/pathe" class="text-muted fa-2x">
-                        <i class="bi bi-twitter"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-<partial name="_PartialViewAdminConsole" />
+        </nav>
+    </header>
 
 <div class="container">
         <main role="main" class="pb-3">
